@@ -2,17 +2,29 @@ import { ApolloServer } from 'apollo-server';
 import { ApolloServerPluginLandingPageGraphQLPlayground,
   ApolloServerPluginLandingPageDisabled } from 'apollo-server-core';
 
-// 1 GraphQL schema
-const typeDefs = `
-  type Query {
-    info: String!
-  }
-`
+import typeDefs from './definitions';
+import links from './data';
 
 // 2 actual implementation of the GraphQL schema
 const resolvers = {
   Query: {
-    info: () => `This is the API of a Hackernews Clone`
+    info: () => `This is the API of a Hackernews Clone`,
+    feed: () => links,
+  },
+  // This resolver can be omitted
+  Link: {
+    id: (parent: any) => {
+      console.log('Link -> id: ', parent.id);
+      return parent.id;
+    },
+    description: (parent: any) => {
+      console.log('Link -> description: ', parent.description);
+      return parent.description;
+    },
+    url: (parent: any) => {
+      console.log('Link -> url: ', parent.url);
+      return parent.url;
+    },
   }
 }
 
