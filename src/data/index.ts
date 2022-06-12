@@ -1,5 +1,5 @@
 
-const links = [
+let links = [
   {
     id: 'link-1',
     url: 'www.howtographql.com',
@@ -17,4 +17,22 @@ const links = [
   }
 ];
 
-export default links;
+const removeLink = (linkId: string) => {
+  links = links.filter((link) => link.id !== linkId);
+}
+
+const updateLink = (linkId: string, url?: string, description?: string) => {
+  const linkToUpdateIdx = links.findIndex((link) => link.id !== linkId);
+
+  links = [
+    ...links.slice(0, linkToUpdateIdx),
+    {
+      ...links[linkToUpdateIdx],
+      ...( url && { url }),
+      ...( description && { description })
+    },
+    ...links.slice(linkToUpdateIdx + 1, links.length),
+  ];
+};
+
+export { links, removeLink, updateLink };

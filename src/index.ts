@@ -3,7 +3,7 @@ import { ApolloServerPluginLandingPageGraphQLPlayground,
   ApolloServerPluginLandingPageDisabled } from 'apollo-server-core';
 
 import typeDefs from './schema';
-import links from './data';
+import { links, removeLink, updateLink } from './data';
 
 // Actual implementation of the GraphQL schema
 const resolvers = {
@@ -14,7 +14,7 @@ const resolvers = {
 
   Mutation: {
     addLink: (parent: any, args: any) => {
-      console.log('Mutation -> post, args: ', args);
+      console.log('Mutation -> addLink, args: ', args);
       const link = {
         id: `link-${links.length + 1}`,
         description: args.description,
@@ -23,6 +23,29 @@ const resolvers = {
 
       links.push(link)
       return link;
+    },
+    updateLink: (parent: any, args: any) => {
+      console.log('Mutation -> updateLink, args: ', args);
+      const { id, url, description } = args;
+
+      if (!links.find(({id: linkId }) => linkId === id)) {
+        return 'Could not find element to update.';
+      }
+
+      updateLink(id, url, description);
+      return  'Link updated';
+    },
+    deleteLink: (parent: any, args: any) => {
+      console.log('Mutation -> deleteLink, args: ', args);
+      const { id } = args;
+
+      if (!links.find(({id: linkId }) => linkId === id)) {
+        return 'Could not find element to delete.';
+      }
+
+      removeLink(id);
+
+      return 'Link removed';
     },
   },
 

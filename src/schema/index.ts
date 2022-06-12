@@ -12,10 +12,10 @@ const typeDefs = `
     addLink(url: String!, description: String!): Link!
 
     # Update a link
-    updateLink(id: ID!, url: String, description: String): Link
+    updateLink(id: ID!, url: String, description: String): String
 
     # Delete a link
-    deleteLink(id: ID!): Link
+    deleteLink(id: ID!): String
   }
 
   ${linkTypedef}
