@@ -28,7 +28,7 @@ const resolvers = {
       console.log('Mutation -> updateLink, args: ', args);
       const { id, url, description } = args;
 
-      if (!links.find(({id: linkId }) => linkId === id)) {
+      if (!links.find(({ id: linkId }) => linkId === id)) {
         return 'Could not find element to update.';
       }
 
@@ -39,7 +39,7 @@ const resolvers = {
       console.log('Mutation -> deleteLink, args: ', args);
       const { id } = args;
 
-      if (!links.find(({id: linkId }) => linkId === id)) {
+      if (!links.find(({ id: linkId }) => linkId === id)) {
         return 'Could not find element to delete.';
       }
 
