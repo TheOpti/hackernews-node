@@ -1,66 +1,88 @@
 import { ApolloServer } from 'apollo-server';
 import { ApolloServerPluginLandingPageGraphQLPlayground,
   ApolloServerPluginLandingPageDisabled } from 'apollo-server-core';
+import { PrismaClient } from '@prisma/client';
 
 import typeDefs from './schema';
-import { links, removeLink, updateLink } from './data';
+
+const prisma = new PrismaClient();
 
 // Actual implementation of the GraphQL schema
 const resolvers = {
   Query: {
     info: () => `This is the API of a Hackernews Clone`,
-    feed: () => links,
+    feed: async (parent: any, args: any, context: any) => {
+      console.log('inside feed');
+      return context.prisma.link.findMany();
+    },
   },
 
   Mutation: {
-    addLink: (parent: any, args: any) => {
-      console.log('Mutation -> addLink, args: ', args);
-      const link = {
-        id: `link-${links.length + 1}`,
-        description: args.description,
-        url: args.url,
-      }
-
-      links.push(link)
-      return link;
+    addLink: (parent: any, args: any, context: any) => {
+      console.log('inside addLink');
+      return context.prisma.link.create({
+        data: {
+          url: args.url,
+          description: args.description,
+        },
+      });
     },
-    updateLink: (parent: any, args: any) => {
-      console.log('Mutation -> updateLink, args: ', args);
+
+    updateLink: async (parent: any, args: any, context: any) => {
+      console.log('inside updateLink');
       const { id, url, description } = args;
 
-      if (!links.find(({ id: linkId }) => linkId === id)) {
-        return 'Could not find element to update.';
-      }
+      try {
+        await context.prisma.link.update({
+          where: { id },
+          data: {
+            ...(url ? { url } : {}),
+            ...(description ? { description } : {}),
+          },
+        });
 
-      updateLink(id, url, description);
-      return  'Link updated';
+        return  'Link updated';
+      } catch (_) {
+        return  'Could not update link with id: ' + id;
+      }
     },
-    deleteLink: (parent: any, args: any) => {
-      console.log('Mutation -> deleteLink, args: ', args);
+
+    deleteLink: async (parent: any, args: any, context: any) => {
+      console.log('inside deleteLink');
       const { id } = args;
 
-      if (!links.find(({ id: linkId }) => linkId === id)) {
-        return 'Could not find element to delete.';
+      try {
+        await  context.prisma.link.delete({
+          where: { id },
+        });
+
+        return  'Link deleted';
+      } catch (_) {
+        return  'Could not delete link with id: ' + id;
       }
-
-      removeLink(id);
-
-      return 'Link removed';
     },
+
+    deleteAllLinks: (parent: any, args: any, context: any) => {
+      console.log('inside deleteAllLinks');
+      try {
+        prisma.link.deleteMany({})
+        return 'All links removed';
+      } catch (_) {
+        console.log('Error during deleting all links');
+        return 'Could not delete all links.'
+      }
+    }
   },
 
   // This resolver can be omitted
   Link: {
     id: (parent: any) => {
-      console.log('Link -> id: ', parent.id);
       return parent.id;
     },
     description: (parent: any) => {
-      console.log('Link -> description: ', parent.description);
       return parent.description;
     },
     url: (parent: any) => {
-      console.log('Link -> url: ', parent.url);
       return parent.url;
     },
   }
@@ -70,6 +92,9 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: {
+    prisma,
+  },
   plugins: [
     process.env.NODE_ENV === 'production'
       ? ApolloServerPluginLandingPageDisabled()
