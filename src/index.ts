@@ -3,6 +3,13 @@ import { ApolloServerPluginLandingPageGraphQLPlayground,
   ApolloServerPluginLandingPageDisabled } from 'apollo-server-core';
 import { PrismaClient } from '@prisma/client';
 
+import { signup, login, addLink, updateLink, deleteLink } from './resolvers/Mutation';
+import { postedBy } from './resolvers/Link';
+import { feed } from './resolvers/Query';
+import { links } from './resolvers/User';
+
+import { getUserId } from './utils';
+
 import typeDefs from './schema';
 
 const prisma = new PrismaClient();
@@ -10,91 +17,38 @@ const prisma = new PrismaClient();
 // Actual implementation of the GraphQL schema
 const resolvers = {
   Query: {
-    info: () => `This is the API of a Hackernews Clone`,
-    feed: async (parent: any, args: any, context: any) => {
-      console.log('inside feed');
-      return context.prisma.link.findMany();
-    },
+    feed
   },
 
   Mutation: {
-    addLink: (parent: any, args: any, context: any) => {
-      console.log('inside addLink');
-      return context.prisma.link.create({
-        data: {
-          url: args.url,
-          description: args.description,
-        },
-      });
-    },
-
-    updateLink: async (parent: any, args: any, context: any) => {
-      console.log('inside updateLink');
-      const { id, url, description } = args;
-
-      try {
-        await context.prisma.link.update({
-          where: { id },
-          data: {
-            ...(url ? { url } : {}),
-            ...(description ? { description } : {}),
-          },
-        });
-
-        return  'Link updated';
-      } catch (_) {
-        return  'Could not update link with id: ' + id;
-      }
-    },
-
-    deleteLink: async (parent: any, args: any, context: any) => {
-      console.log('inside deleteLink');
-      const { id } = args;
-
-      try {
-        await  context.prisma.link.delete({
-          where: { id },
-        });
-
-        return  'Link deleted';
-      } catch (_) {
-        return  'Could not delete link with id: ' + id;
-      }
-    },
-
-    deleteAllLinks: (parent: any, args: any, context: any) => {
-      console.log('inside deleteAllLinks');
-      try {
-        prisma.link.deleteMany({})
-        return 'All links removed';
-      } catch (_) {
-        console.log('Error during deleting all links');
-        return 'Could not delete all links.'
-      }
-    }
+    signup,
+    login,
+    addLink,
+    updateLink,
+    deleteLink
   },
 
-  // This resolver can be omitted
   Link: {
-    id: (parent: any) => {
-      return parent.id;
-    },
-    description: (parent: any) => {
-      return parent.description;
-    },
-    url: (parent: any) => {
-      return parent.url;
-    },
-  }
+    postedBy
+  },
+
+  User: {
+    links
+  },
 }
 
 // Server
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: {
+  context: ({ req }) => ({
+    ...req,
     prisma,
-  },
+    userId:
+      req && req.headers.authorization
+        ? getUserId(req)
+        : null
+  }),
   plugins: [
     process.env.NODE_ENV === 'production'
       ? ApolloServerPluginLandingPageDisabled()

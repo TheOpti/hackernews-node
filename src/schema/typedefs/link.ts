@@ -4,5 +4,6 @@ export const linkTypedef = `
     id: ID!
     description: String!
     url: String!
+    postedBy: User
   }
 `;

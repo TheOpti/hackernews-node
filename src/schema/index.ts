@@ -1,4 +1,6 @@
 import { linkTypedef } from './typedefs/link';
+import { userTypedef } from './typedefs/user';
+import { authPayloadTypedef } from './typedefs/authPayload';
 
 // GraphQL schema
 const typeDefs = `
@@ -19,9 +21,19 @@ const typeDefs = `
 
     # Delete all links
     deleteAllLinks: String
+
+    # Register new user
+    signup(email: String!, password: String!, name: String!): AuthPayload
+
+    # Login into the application
+    login(email: String!, password: String!): AuthPayload
   }
 
   ${linkTypedef}
+
+  ${userTypedef}
+
+  ${authPayloadTypedef}
 `;
 
 export default typeDefs;

@@ -5,35 +5,58 @@ Start server - `npm start`. Server is available on `localhost:4000`.
 
 ### Queries
 
-#### Query to list all links:
-
-```
+###
+```graphql
+# Query to list all links:
 query {
   feed { id, description, url }
 }
-```
 
-#### Mutation to add new link:
-
-```
+# Mutation to add new link:
 mutation {
   addLink(url: "www.prisma.io", description: "Prisma replaces traditional ORMs") {
     id
   }
 }
-```
 
-#### Mutation to update link:
-```
+# Mutation to update link:
 mutation {
   updateLink(id: "link-1", url: "dsadsadsa")
 }
-```
 
-#### Mutation to remove link:
-```
+# Mutation to remove link:
 mutation {
   deleteLink(id: "link-3")
+}
+```
+
+### Queries - Usage with authentication
+
+#### Creating new user
+
+
+
+```graphql
+# Register new user and retrieve token
+mutation {
+  signup(name: "Alice", email: "alice@prisma.io", password: "graphql") {
+    token
+    user {
+      id
+    }
+  }
+}
+
+# Create new link as a newly registered user (remember to include token in auth header)
+mutation {
+  addLink(url: "www.graphqlconf.org", description: "An awesome GraphQL conference") {
+    id
+  }
+}
+
+# Get list of all links with authors
+query {
+  feed { id, description, url, postedBy { id, email }  }
 }
 ```
 
@@ -53,4 +76,3 @@ The root types correspond to the three operation types offered by GraphQL: queri
 This enables the client to get immediate information about related events.
 Basically, a client subscribes to an event in the server, and whenever that event is
 called, the server will send the corresponding data to the client.
-
