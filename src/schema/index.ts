@@ -1,6 +1,7 @@
 import { linkTypedef } from './typedefs/link';
 import { userTypedef } from './typedefs/user';
 import { authPayloadTypedef } from './typedefs/authPayload';
+import { subscriptionTypedef } from "./typedefs/subscription";
 
 // GraphQL schema
 const typeDefs = `
@@ -34,6 +35,8 @@ const typeDefs = `
   ${userTypedef}
 
   ${authPayloadTypedef}
+
+  ${subscriptionTypedef}
 `;
 
 export default typeDefs;

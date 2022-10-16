@@ -32,10 +32,6 @@ mutation {
 
 ### Queries - Usage with authentication
 
-#### Creating new user
-
-
-
 ```graphql
 # Register new user and retrieve token
 mutation {
@@ -58,6 +54,20 @@ mutation {
 query {
   feed { id, description, url, postedBy { id, email }  }
 }
+
+# Subscribing
+subscription {
+  newLink {
+    id
+    url
+    description
+    postedBy {
+      id
+      name
+      email
+    }
+  }
+}
 ```
 
 ## Notes about GraphQL
@@ -76,3 +86,18 @@ The root types correspond to the three operation types offered by GraphQL: queri
 This enables the client to get immediate information about related events.
 Basically, a client subscribes to an event in the server, and whenever that event is
 called, the server will send the corresponding data to the client.
+
+
+### Subscriptions
+
+In addition to queries and mutations, GraphQL supports a third operation type: subscriptions.
+
+Subscriptions are a GraphQL feature that allows a server to send data to its clients when a
+specific event happens. Subscriptions are usually implemented with WebSockets.
+
+In that setup, the server maintains a steady connection to its subscribed client.
+
+Subscriptions:
+- Like queries, subscriptions enable you to fetch data.
+- Unlike queries, subscriptions are long-lasting operations that can change their result
+over time. They can maintain an active connection to your GraphQL server (most commonly via WebSocket), enabling the server to push updates to the subscription's result.

@@ -37,13 +37,17 @@ export const addLink = async (parent: any, args: any, context: any) => {
   console.log('inside addLink');
   const { userId } = context;
 
-  return context.prisma.link.create({
+  const newLink = await context.prisma.link.create({
     data: {
       url: args.url,
       description: args.description,
       postedBy: { connect: { id: userId } },
     },
   });
+
+  context.pubsub.publish('NEW_LINK', newLink);
+
+  return newLink;
 };
 
 export const updateLink = async (parent: any, args: any, context: any) => {
