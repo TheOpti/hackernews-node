@@ -1,8 +1,19 @@
-import { ApolloServer } from 'apollo-server';
-import { ApolloServerPluginLandingPageGraphQLPlayground,
-  ApolloServerPluginLandingPageDisabled } from 'apollo-server-core';
-import { PubSub } from 'graphql-subscriptions';
+import { createServer } from 'http';
+import express from 'express';
+import { ApolloServer } from '@apollo/server';
+import {
+  ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginLandingPageProductionDefault
+} from '@apollo/server/plugin/landingPage/default';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import { expressMiddleware } from '@apollo/server/express4';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import { PrismaClient } from '@prisma/client';
+import { PubSub } from 'graphql-subscriptions';
+import { useServer } from 'graphql-ws/lib/use/ws';
+import { WebSocketServer } from 'ws';
+import bodyParser from 'body-parser';
+import cors from 'cors';
 
 import { signup, login, addLink, updateLink, deleteLink } from './resolvers/Mutation';
 import { postedBy } from './resolvers/Link';
@@ -45,29 +56,65 @@ const resolvers = {
   }
 }
 
+// Create schema, which will be used separately by ApolloServer and
+// the WebSocket server.
+const schema = makeExecutableSchema({ typeDefs, resolvers });
+
+// Create an Express app and HTTP server; we will attach the WebSocket
+// server and the ApolloServer to this HTTP server.
+const app = express();
+const httpServer = createServer(app);
+
+// Set up WebSocket server.
+const wsServer = new WebSocketServer({
+  server: httpServer,
+  path: '/graphql',
+});
+
+const context = ({ req }: any) => ({
+  ...req,
+  prisma,
+  pubsub,
+  userId:
+    req && req.headers.authorization
+      ? getUserId(req)
+      : null
+});
+
+const serverCleanup = useServer({ schema, context }, wsServer);
+
 // Server
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  context: ({ req }) => ({
-    ...req,
-    prisma,
-    pubsub,
-    userId:
-      req && req.headers.authorization
-        ? getUserId(req)
-        : null
-  }),
+  schema,
   plugins: [
+    // GraphQL Playground
     process.env.NODE_ENV === 'production'
-      ? ApolloServerPluginLandingPageDisabled()
-      : ApolloServerPluginLandingPageGraphQLPlayground(),
+      ? ApolloServerPluginLandingPageProductionDefault()
+      : ApolloServerPluginLandingPageLocalDefault(),
+
+    // Proper shutdown for the HTTP server.
+    ApolloServerPluginDrainHttpServer({ httpServer }),
+
+    // Proper shutdown for the WebSocket server.
+    {
+      async serverWillStart() {
+        return {
+          async drainServer() {
+            await serverCleanup.dispose();
+          },
+        };
+      },
+    }
   ],
-})
+});
 
-server
-  .listen()
-  .then(({ url }: any) =>
-    console.log(`Server is running on ${url}`)
-  );
+// HTTP server is fully set up, actually listen.
+httpServer.listen(4000, async () => {
+  await server.start();
+  app.use('/graphql', cors<cors.CorsRequest>(), bodyParser.json(), expressMiddleware(server, {
+    context
+  }));
 
+  console.log(`🚀 Query endpoint ready at http://localhost:4000/graphql`);
+  console.log(`🚀 Subscription endpoint ready at ws://localhost:4000/graphql`);
+});
