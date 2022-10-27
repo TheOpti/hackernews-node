@@ -1,5 +1,17 @@
 
 export const feed = async (parent: any, args: any, context: any) => {
-  console.log('inside feed');
-  return context.prisma.link.findMany();
+  const where = args.filter
+    ? {
+      OR: [
+        { description: { contains: args.filter } },
+        { url: { contains: args.filter } },
+      ],
+    }
+    : {};
+
+  const links = await context.prisma.link.findMany({
+    where,
+  });
+
+  return links;
 };
