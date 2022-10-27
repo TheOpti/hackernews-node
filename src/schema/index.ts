@@ -1,5 +1,6 @@
 import { linkTypedef } from './typedefs/link';
 import { userTypedef } from './typedefs/user';
+import { voteTypedef } from './typedefs/vote';
 import { authPayloadTypedef } from './typedefs/authPayload';
 import { subscriptionTypedef } from "./typedefs/subscription";
 
@@ -28,11 +29,16 @@ const typeDefs = `
 
     # Login into the application
     login(email: String!, password: String!): AuthPayload
+
+    # Add vote
+    vote(linkId: ID!): Vote
   }
 
   ${linkTypedef}
 
   ${userTypedef}
+
+  ${voteTypedef}
 
   ${authPayloadTypedef}
 

@@ -15,10 +15,11 @@ import { WebSocketServer } from 'ws';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
-import { signup, login, addLink, updateLink, deleteLink } from './resolvers/Mutation';
-import { postedBy } from './resolvers/Link';
+import { signup, login, addLink, updateLink, deleteLink, vote } from './resolvers/Mutation';
+import { postedBy, votes } from './resolvers/Link';
 import { feed } from './resolvers/Query';
 import { links } from './resolvers/User';
+import { link as voteLink, user as voteUser } from './resolvers/Vote';
 import { newLink } from './resolvers/Subscription';
 
 import { getUserId } from './utils';
@@ -40,15 +41,22 @@ const resolvers = {
     login,
     addLink,
     updateLink,
-    deleteLink
+    deleteLink,
+    vote
   },
 
   Link: {
-    postedBy
+    postedBy,
+    votes
   },
 
   User: {
     links
+  },
+
+  Vote: {
+    link: voteLink,
+    user: voteUser,
   },
 
   Subscription: {

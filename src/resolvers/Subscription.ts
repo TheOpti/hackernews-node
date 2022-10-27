@@ -8,3 +8,12 @@ export const newLink = {
   subscribe: subscribeToNewLink,
   resolve: (payload: any) => payload,
 };
+
+export const subscribeToNewVote = (parent: any, args: any, context: any) => {
+  return context.pubsub.asyncIterator('NEW_VOTE');
+};
+
+export const newVote = {
+  subscribe: subscribeToNewVote,
+  resolve: (payload: any) => payload,
+};

@@ -5,11 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node ./src/index.ts",
-    "prisma-script": "ts-node ./src/prisma/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "prisma": {
-    "seed": "ts-node src/prisma/seed.ts"
+    "prisma-studio": "prisma studio"
   },
   "repository": {
     "type": "git",

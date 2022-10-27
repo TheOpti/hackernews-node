@@ -5,5 +5,6 @@ export const linkTypedef = `
     description: String!
     url: String!
     postedBy: User
+    votes: [Vote!]
   }
 `;
