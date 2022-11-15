@@ -8,7 +8,7 @@ import { subscriptionTypedef } from "./typedefs/subscription";
 const typeDefs = `
   type Query {
     info: String!
-    feed(filter: String): [Link!]!
+    feed(filter: String, skip: Int, take: Int): [Link!]!
   }
 
   type Mutation {

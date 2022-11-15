@@ -5,11 +5,26 @@ Start server - `npm start`. Server is available on `localhost:4000`.
 
 ### Queries
 
+Limit and offset have different names in the Prisma API:
+
+- The limit is called `take`, meaning we take `x` elements after a provided start index.
+- The start index is called `skip`, since wwe skip that many elements in the list.
+
+
 ###
 ```graphql
-# Query to list all links:
+# Query to list all links (and without any parameters):
 query {
   feed { id, description, url }
+}
+
+# Query with filter and pagination:
+query {
+  feed(filter: "casc", skip: 0, take: 10) {
+    id
+    description
+    url
+  }
 }
 
 # Mutation to add new link:

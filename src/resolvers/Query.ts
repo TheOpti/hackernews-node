@@ -9,9 +9,9 @@ export const feed = async (parent: any, args: any, context: any) => {
     }
     : {};
 
-  const links = await context.prisma.link.findMany({
+  return await context.prisma.link.findMany({
     where,
+    skip: args.skip,
+    take: args.take,
   });
-
-  return links;
 };
