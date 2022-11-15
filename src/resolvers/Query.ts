@@ -13,5 +13,6 @@ export const feed = async (parent: any, args: any, context: any) => {
     where,
     skip: args.skip,
     take: args.take,
+    orderBy: args.orderBy,
   });
 };

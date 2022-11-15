@@ -8,7 +8,7 @@ import { subscriptionTypedef } from "./typedefs/subscription";
 const typeDefs = `
   type Query {
     info: String!
-    feed(filter: String, skip: Int, take: Int): [Link!]!
+    feed(filter: String, skip: Int, take: Int, orderBy: LinkOrderByInput): [Link!]!
   }
 
   type Mutation {
@@ -43,6 +43,17 @@ const typeDefs = `
   ${authPayloadTypedef}
 
   ${subscriptionTypedef}
+
+  input LinkOrderByInput {
+    description: Sort
+    url: Sort
+    createdAt: Sort
+  }
+
+  enum Sort {
+    asc
+    desc
+  }
 `;
 
 export default typeDefs;
