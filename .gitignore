@@ -105,3 +105,6 @@ dist
 
 # IDE
 .idea/
+
+# Database file
+prisma/dev.db
