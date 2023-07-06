@@ -1,4 +1,3 @@
-
 export const linkTypedef = `
   type Link {
     id: ID!

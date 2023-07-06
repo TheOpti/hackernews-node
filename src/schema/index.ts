@@ -2,7 +2,7 @@ import { linkTypedef } from './typedefs/link';
 import { userTypedef } from './typedefs/user';
 import { voteTypedef } from './typedefs/vote';
 import { authPayloadTypedef } from './typedefs/authPayload';
-import { subscriptionTypedef } from "./typedefs/subscription";
+import { subscriptionTypedef } from './typedefs/subscription';
 
 // GraphQL schema
 const typeDefs = `

@@ -26,4 +26,4 @@ export const getUserId = (req: any, authToken?: any) => {
   }
 
   throw new Error('Not authenticated');
-}
+};

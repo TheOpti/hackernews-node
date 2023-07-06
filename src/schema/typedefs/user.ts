@@ -1,4 +1,3 @@
-
 export const userTypedef = `
   type User {
     id: ID!

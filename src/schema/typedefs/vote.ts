@@ -1,4 +1,3 @@
-
 export const voteTypedef = `
   type Vote {
     id: ID!

@@ -56,13 +56,13 @@ const resolvers = {
 
   Vote: {
     link: voteLink,
-    user: voteUser,
+    user: voteUser
   },
 
   Subscription: {
-    newLink,
+    newLink
   }
-}
+};
 
 // Create schema, which will be used separately by ApolloServer and
 // the WebSocket server.
@@ -76,17 +76,14 @@ const httpServer = createServer(app);
 // Set up WebSocket server.
 const wsServer = new WebSocketServer({
   server: httpServer,
-  path: '/graphql',
+  path: '/graphql'
 });
 
 const context = ({ req }: any) => ({
   ...req,
   prisma,
   pubsub,
-  userId:
-    req && req.headers.authorization
-      ? getUserId(req)
-      : null
+  userId: req && req.headers.authorization ? getUserId(req) : null
 });
 
 const serverCleanup = useServer({ schema, context }, wsServer);
@@ -109,19 +106,24 @@ const server = new ApolloServer({
         return {
           async drainServer() {
             await serverCleanup.dispose();
-          },
+          }
         };
-      },
+      }
     }
-  ],
+  ]
 });
 
 // HTTP server is fully set up, actually listen.
 httpServer.listen(4000, async () => {
   await server.start();
-  app.use('/graphql', cors<cors.CorsRequest>(), bodyParser.json(), expressMiddleware(server, {
-    context
-  }));
+  app.use(
+    '/graphql',
+    cors<cors.CorsRequest>(),
+    bodyParser.json(),
+    expressMiddleware(server, {
+      context
+    })
+  );
 
   console.log(`🚀 Query endpoint ready at http://localhost:4000/graphql`);
   console.log(`🚀 Subscription endpoint ready at ws://localhost:4000/graphql`);

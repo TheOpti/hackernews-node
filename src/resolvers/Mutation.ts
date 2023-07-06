@@ -5,19 +5,23 @@ import { APP_SECRET } from '../utils';
 
 export const signup = async (parent: any, args: any, context: any) => {
   const password = await bcrypt.hash(args.password, 10);
-  const user = await context.prisma.user.create({ data: { ...args, password } });
+  const user = await context.prisma.user.create({
+    data: { ...args, password }
+  });
   const token = jwt.sign({ userId: user.id }, APP_SECRET);
 
   return {
     token,
-    user,
+    user
   };
 };
 
 export const login = async (parent: any, args: any, context: any) => {
-  const user = await context.prisma.user.findUnique({ where: { email: args.email } });
+  const user = await context.prisma.user.findUnique({
+    where: { email: args.email }
+  });
   if (!user) {
-    throw new Error('No such user found')
+    throw new Error('No such user found');
   }
 
   const valid = await bcrypt.compare(args.password, user.password);
@@ -29,7 +33,7 @@ export const login = async (parent: any, args: any, context: any) => {
 
   return {
     token,
-    user,
+    user
   };
 };
 
@@ -41,8 +45,8 @@ export const addLink = async (parent: any, args: any, context: any) => {
     data: {
       url: args.url,
       description: args.description,
-      postedBy: { connect: { id: userId } },
-    },
+      postedBy: { connect: { id: userId } }
+    }
   });
 
   context.pubsub.publish('NEW_LINK', newLink);
@@ -61,23 +65,23 @@ export const updateLink = async (parent: any, args: any, context: any) => {
     });
 
     if (link.postedById !== userId) {
-      throw new Error('Cannot update this link.')
+      throw new Error('Cannot update this link.');
     }
 
     await context.prisma.link.update({
       where: { id },
       data: {
         ...(url ? { url } : {}),
-        ...(description ? { description } : {}),
-      },
+        ...(description ? { description } : {})
+      }
     });
 
-    return  'Link updated';
+    return 'Link updated';
   } catch (err) {
     console.log('Error: ', err);
-    return  'Could not update link with id: ' + id;
+    return 'Could not update link with id: ' + id;
   }
-}
+};
 
 export const deleteLink = async (parent: any, args: any, context: any) => {
   console.log('inside deleteLink');
@@ -90,18 +94,18 @@ export const deleteLink = async (parent: any, args: any, context: any) => {
     });
 
     if (link.postedById !== userId) {
-      throw new Error('Cannot delete this link.')
+      throw new Error('Cannot delete this link.');
     }
 
     await context.prisma.link.delete({
-      where: { id },
+      where: { id }
     });
 
-    return  'Link deleted';
+    return 'Link deleted';
   } catch (_) {
-    return  'Could not delete link with id: ' + id;
+    return 'Could not delete link with id: ' + id;
   }
-}
+};
 
 export const vote = async (parent: any, args: any, context: any) => {
   const userId = context.userId;
@@ -122,7 +126,7 @@ export const vote = async (parent: any, args: any, context: any) => {
   const newVote = context.prisma.vote.create({
     data: {
       user: { connect: { id: userId } },
-      link: { connect: { id: Number(args.linkId) } },
+      link: { connect: { id: Number(args.linkId) } }
     }
   });
 
