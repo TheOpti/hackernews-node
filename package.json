@@ -18,6 +18,9 @@
   "bugs": {
     "url": "https://github.com/TheOpti/hackernews-node/issues"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "homepage": "https://github.com/TheOpti/hackernews-node#readme",
   "dependencies": {
     "@apollo/server": "^4.0.0",
