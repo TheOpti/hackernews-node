@@ -20,13 +20,16 @@ export const login = async (parent: any, args: any, context: any) => {
   const user = await context.prisma.user.findUnique({
     where: { email: args.email }
   });
+
   if (!user) {
-    throw new Error('No such user found');
+    console.log('User not found');
+    throw new Error('Incorrect user or password.');
   }
 
   const valid = await bcrypt.compare(args.password, user.password);
   if (!valid) {
-    throw new Error('Invalid password');
+    console.log('Invalid password');
+    throw new Error('Invalid password.');
   }
 
   const token = jwt.sign({ userId: user.id }, APP_SECRET);
