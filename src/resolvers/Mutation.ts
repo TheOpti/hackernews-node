@@ -22,13 +22,11 @@ export const login = async (parent: any, args: any, context: any) => {
   });
 
   if (!user) {
-    console.log('User not found');
     throw new Error('Incorrect user or password.');
   }
 
   const valid = await bcrypt.compare(args.password, user.password);
   if (!valid) {
-    console.log('Invalid password');
     throw new Error('Invalid password.');
   }
 
@@ -41,7 +39,6 @@ export const login = async (parent: any, args: any, context: any) => {
 };
 
 export const addLink = async (parent: any, args: any, context: any) => {
-  console.log('inside addLink');
   const { userId } = context;
 
   const newLink = await context.prisma.link.create({
@@ -58,7 +55,6 @@ export const addLink = async (parent: any, args: any, context: any) => {
 };
 
 export const updateLink = async (parent: any, args: any, context: any) => {
-  console.log('inside updateLink');
   const { id, url, description } = args;
   const { userId } = context;
 
@@ -81,13 +77,11 @@ export const updateLink = async (parent: any, args: any, context: any) => {
 
     return 'Link updated';
   } catch (err) {
-    console.log('Error: ', err);
     return 'Could not update link with id: ' + id;
   }
 };
 
 export const deleteLink = async (parent: any, args: any, context: any) => {
-  console.log('inside deleteLink');
   const { id } = args;
   const { userId } = context;
 

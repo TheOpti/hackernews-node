@@ -1,6 +1,6 @@
 import { createServer } from 'http';
 import express from 'express';
-import { ApolloServer } from '@apollo/server';
+import { ApolloServer, BaseContext, GraphQLRequestContext } from '@apollo/server';
 import {
   ApolloServerPluginLandingPageLocalDefault,
   ApolloServerPluginLandingPageProductionDefault
@@ -15,16 +15,17 @@ import { WebSocketServer } from 'ws';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
+import { logger } from './logger';
+import { getWebsocketShutdownPlugin } from './plugins/websocketShutdownPlugin';
 import { signup, login, addLink, updateLink, deleteLink, vote } from './resolvers/Mutation';
 import { postedBy, votes } from './resolvers/Link';
 import { feed } from './resolvers/Query';
 import { links } from './resolvers/User';
 import { link as voteLink, user as voteUser } from './resolvers/Vote';
 import { newLink } from './resolvers/Subscription';
-
-import { getUserId } from './utils';
-
 import typeDefs from './schema';
+import { getUserId } from './utils';
+import { getLoggerPlugin } from './plugins/loggerPlugin';
 
 const prisma = new PrismaClient();
 
@@ -91,6 +92,7 @@ const serverCleanup = useServer({ schema, context }, wsServer);
 // Server
 const server = new ApolloServer({
   schema,
+
   plugins: [
     // GraphQL Playground
     process.env.NODE_ENV === 'production'
@@ -101,21 +103,22 @@ const server = new ApolloServer({
     ApolloServerPluginDrainHttpServer({ httpServer }),
 
     // Proper shutdown for the WebSocket server.
-    {
-      async serverWillStart() {
-        return {
-          async drainServer() {
-            await serverCleanup.dispose();
-          }
-        };
-      }
-    }
+    getWebsocketShutdownPlugin(serverCleanup),
+
+    // Logging
+    getLoggerPlugin()
   ]
 });
 
 // HTTP server is fully set up, actually listen.
 httpServer.listen(4000, async () => {
   await server.start();
+
+  app.use((req, _, next) => {
+    logger.info('Incoming request: %s %s', req.method, req.url);
+    next();
+  });
+
   app.use(
     '/graphql',
     cors<cors.CorsRequest>(),
@@ -125,6 +128,6 @@ httpServer.listen(4000, async () => {
     })
   );
 
-  console.log(`🚀 Query endpoint ready at http://localhost:4000/graphql`);
-  console.log(`🚀 Subscription endpoint ready at ws://localhost:4000/graphql`);
+  logger.info(`🚀 Query endpoint ready at http://localhost:4000/graphql`);
+  logger.info(`🚀 Subscription endpoint ready at ws://localhost:4000/graphql`);
 });
