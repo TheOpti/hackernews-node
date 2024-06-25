@@ -6,7 +6,9 @@
   "scripts": {
     "start": "npx nodemon ./src/index.ts",
     "prisma-studio": "prisma studio",
-    "prettier:fix": "prettier \"@(src)/**/*.@(ts)\" --write"
+    "prettier:fix": "prettier \"@(src)/**/*.@(ts)\" --write",
+    "save-schema": "ts-node src/generateSchema.ts && npx prettier --write src/generated/schema.graphql",
+    "generate": "npm run save-schema && graphql-codegen"
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,10 @@
   "homepage": "https://github.com/TheOpti/hackernews-node#readme",
   "dependencies": {
     "@apollo/server": "^4.0.0",
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/typescript": "^4.0.7",
+    "@graphql-codegen/typescript-operations": "^4.2.1",
+    "@graphql-codegen/typescript-resolvers": "^4.1.0",
     "@graphql-tools/schema": "^9.0.4",
     "@prisma/client": "^4.0.0",
     "apollo-server-types": "^3.6.3",
