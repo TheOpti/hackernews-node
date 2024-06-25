@@ -1,6 +1,6 @@
 import { createServer } from 'http';
-import express from 'express';
-import { ApolloServer, BaseContext, GraphQLRequestContext } from '@apollo/server';
+import express, { Request } from 'express';
+import { ApolloServer } from '@apollo/server';
 import {
   ApolloServerPluginLandingPageLocalDefault,
   ApolloServerPluginLandingPageProductionDefault
@@ -24,7 +24,7 @@ import { links } from './resolvers/User';
 import { link as voteLink, user as voteUser } from './resolvers/Vote';
 import { newLink } from './resolvers/Subscription';
 import typeDefs from './schema';
-import { getUserId } from './utils';
+import { getUserId, getUserIdFromWebSocket } from './utils';
 import { getLoggerPlugin } from './plugins/loggerPlugin';
 
 const prisma = new PrismaClient();
@@ -80,17 +80,33 @@ const wsServer = new WebSocketServer({
   path: '/graphql'
 });
 
-const context = ({ req }: any) => ({
-  ...req,
+type GraphQLContext = {
+  prisma: PrismaClient;
+  pubsub: PubSub;
+  userId: string | null;
+  req?: Request;
+} & Record<string, unknown>;
+
+// For HTTP requests
+const httpContext = async ({ req }: { req: Request }): Promise<GraphQLContext> => ({
   prisma,
   pubsub,
-  userId: req && req.headers.authorization ? getUserId(req) : null
+  userId: req && req.headers.authorization ? await getUserId(req) : null,
+  req
 });
 
-const serverCleanup = useServer({ schema, context }, wsServer);
+// For WebSocket connections
+const wsContext = async (connectionParams: any): Promise<GraphQLContext> => ({
+  prisma,
+  pubsub,
+  userId: await getUserIdFromWebSocket(connectionParams)
+  // Note: 'req' is not available here
+});
+
+const serverCleanup = useServer<GraphQLContext>({ schema, context: wsContext }, wsServer);
 
 // Server
-const server = new ApolloServer({
+const server = new ApolloServer<GraphQLContext>({
   schema,
 
   plugins: [
@@ -123,8 +139,8 @@ httpServer.listen(4000, async () => {
     '/graphql',
     cors<cors.CorsRequest>(),
     bodyParser.json(),
-    expressMiddleware(server, {
-      context
+    expressMiddleware<GraphQLContext>(server, {
+      context: httpContext
     })
   );
 
