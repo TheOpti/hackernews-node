@@ -26,13 +26,15 @@ import { newLink } from './resolvers/Subscription';
 import typeDefs from './schema';
 import { getUserId, getUserIdFromWebSocket } from './utils';
 import { getLoggerPlugin } from './plugins/loggerPlugin';
+import { Resolvers } from './generated/graphql';
+import { GraphQLContext } from './types';
 
 const prisma = new PrismaClient();
 
 const pubsub = new PubSub();
 
 // Actual implementation of the GraphQL schema
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
     feed
   },
@@ -79,13 +81,6 @@ const wsServer = new WebSocketServer({
   server: httpServer,
   path: '/graphql'
 });
-
-type GraphQLContext = {
-  prisma: PrismaClient;
-  pubsub: PubSub;
-  userId: string | null;
-  req?: Request;
-} & Record<string, unknown>;
 
 // For HTTP requests
 const httpContext = async ({ req }: { req: Request }): Promise<GraphQLContext> => ({

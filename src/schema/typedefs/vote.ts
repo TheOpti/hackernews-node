@@ -1,7 +1,7 @@
 export const voteTypedef = `
   type Vote {
-    id: ID!
-    link: Link!
-    user: User!
+    id: IntID!
+    link: Link
+    user: User
   }
 `;

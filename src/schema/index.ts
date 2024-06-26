@@ -6,6 +6,8 @@ import { subscriptionTypedef } from './typedefs/subscription';
 
 // GraphQL schema
 const typeDefs = `
+  scalar IntID
+
   type Query {
     info: String!
     feed(filter: String, skip: Int, take: Int, orderBy: LinkOrderByInput): [Link!]!

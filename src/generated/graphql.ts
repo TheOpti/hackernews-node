@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -14,6 +14,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  IntID: { input: number; output: number; }
 };
 
 export type AuthPayload = {
@@ -25,7 +26,7 @@ export type AuthPayload = {
 export type Link = {
   __typename?: 'Link';
   description: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
+  id: Scalars['IntID']['output'];
   postedBy?: Maybe<User>;
   url: Scalars['String']['output'];
   votes?: Maybe<Array<Vote>>;
@@ -112,16 +113,16 @@ export type Subscription = {
 export type User = {
   __typename?: 'User';
   email: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  links: Array<Link>;
+  id: Scalars['IntID']['output'];
+  links?: Maybe<Array<Link>>;
   name: Scalars['String']['output'];
 };
 
 export type Vote = {
   __typename?: 'Vote';
-  id: Scalars['ID']['output'];
-  link: Link;
-  user: User;
+  id: Scalars['IntID']['output'];
+  link?: Maybe<Link>;
+  user?: Maybe<User>;
 };
 
 
@@ -199,6 +200,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  IntID: ResolverTypeWrapper<Scalars['IntID']['output']>;
   Link: ResolverTypeWrapper<Link>;
   LinkOrderByInput: LinkOrderByInput;
   Mutation: ResolverTypeWrapper<{}>;
@@ -216,6 +218,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
+  IntID: Scalars['IntID']['output'];
   Link: Link;
   LinkOrderByInput: LinkOrderByInput;
   Mutation: {};
@@ -232,9 +235,13 @@ export type AuthPayloadResolvers<ContextType = any, ParentType extends Resolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export interface IntIdScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['IntID'], any> {
+  name: 'IntID';
+}
+
 export type LinkResolvers<ContextType = any, ParentType extends ResolversParentTypes['Link'] = ResolversParentTypes['Link']> = {
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['IntID'], ParentType, ContextType>;
   postedBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   votes?: Resolver<Maybe<Array<ResolversTypes['Vote']>>, ParentType, ContextType>;
@@ -263,21 +270,22 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  links?: Resolver<Array<ResolversTypes['Link']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['IntID'], ParentType, ContextType>;
+  links?: Resolver<Maybe<Array<ResolversTypes['Link']>>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type VoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Vote'] = ResolversParentTypes['Vote']> = {
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  link?: Resolver<ResolversTypes['Link'], ParentType, ContextType>;
-  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['IntID'], ParentType, ContextType>;
+  link?: Resolver<Maybe<ResolversTypes['Link']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
   AuthPayload?: AuthPayloadResolvers<ContextType>;
+  IntID?: GraphQLScalarType;
   Link?: LinkResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

@@ -5,3 +5,6 @@ generates:
       - 'typescript'
       - 'typescript-operations'
       - 'typescript-resolvers'
+    config:
+      scalars:
+        IntID: number

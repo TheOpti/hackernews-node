@@ -1,3 +1,5 @@
+scalar IntID
+
 type Query {
   info: String!
   feed(filter: String, skip: Int, take: Int, orderBy: LinkOrderByInput): [Link!]!
@@ -27,7 +29,7 @@ type Mutation {
 }
 
 type Link {
-  id: ID!
+  id: IntID!
   description: String!
   url: String!
   postedBy: User
@@ -35,16 +37,16 @@ type Link {
 }
 
 type User {
-  id: ID!
+  id: IntID!
   name: String!
   email: String!
-  links: [Link!]!
+  links: [Link!]
 }
 
 type Vote {
-  id: ID!
-  link: Link!
-  user: User!
+  id: IntID!
+  link: Link
+  user: User
 }
 
 type AuthPayload {

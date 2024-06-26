@@ -1,6 +1,6 @@
 export const linkTypedef = `
   type Link {
-    id: ID!
+    id: IntID!
     description: String!
     url: String!
     postedBy: User

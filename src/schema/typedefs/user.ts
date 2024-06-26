@@ -1,8 +1,8 @@
 export const userTypedef = `
   type User {
-    id: ID!
+    id: IntID!
     name: String!
     email: String!
-    links: [Link!]!
+    links: [Link!]
   }
 `;
