@@ -42,6 +42,7 @@
     "graphql-ws": "^5.11.2",
     "jsonwebtoken": "^8.5.1",
     "winston": "^3.13.0",
+    "winston-daily-rotate-file": "^5.0.0",
     "ws": "^8.9.0"
   },
   "devDependencies": {
