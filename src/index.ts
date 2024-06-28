@@ -22,7 +22,7 @@ import { postedBy, votes } from './resolvers/Link';
 import { feed } from './resolvers/Query';
 import { links } from './resolvers/User';
 import { link as voteLink, user as voteUser } from './resolvers/Vote';
-import { newLink } from './resolvers/Subscription';
+import { newLink, newVote } from './resolvers/Subscription';
 import typeDefs from './schema';
 import { getUserId, getUserIdFromWebSocket } from './utils';
 import { getLoggerPlugin } from './plugins/loggerPlugin';
@@ -63,7 +63,8 @@ const resolvers: Resolvers = {
   },
 
   Subscription: {
-    newLink
+    newLink,
+    newVote
   }
 };
 
@@ -86,7 +87,7 @@ const wsServer = new WebSocketServer({
 const httpContext = async ({ req }: { req: Request }): Promise<GraphQLContext> => ({
   prisma,
   pubsub,
-  userId: req && req.headers.authorization ? await getUserId(req) : null,
+  userId: req && req.headers.authorization ? getUserId(req) : undefined,
   req
 });
 

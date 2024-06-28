@@ -1,9 +1,18 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import { GraphQLContext } from '../types';
 
 import { APP_SECRET } from '../utils';
+import {
+  MutationAddLinkArgs,
+  MutationDeleteLinkArgs,
+  MutationLoginArgs,
+  MutationSignupArgs,
+  MutationUpdateLinkArgs,
+  MutationVoteArgs
+} from '../generated/graphql';
 
-export const signup = async (parent: any, args: any, context: any) => {
+export const signup = async (_: {}, args: MutationSignupArgs, context: GraphQLContext) => {
   const password = await bcrypt.hash(args.password, 10);
   const user = await context.prisma.user.create({
     data: { ...args, password }
@@ -16,7 +25,7 @@ export const signup = async (parent: any, args: any, context: any) => {
   };
 };
 
-export const login = async (parent: any, args: any, context: any) => {
+export const login = async (_: {}, args: MutationLoginArgs, context: GraphQLContext) => {
   const user = await context.prisma.user.findUnique({
     where: { email: args.email }
   });
@@ -38,7 +47,7 @@ export const login = async (parent: any, args: any, context: any) => {
   };
 };
 
-export const addLink = async (parent: any, args: any, context: any) => {
+export const addLink = async (_: {}, args: MutationAddLinkArgs, context: GraphQLContext) => {
   const { userId } = context;
 
   const newLink = await context.prisma.link.create({
@@ -54,7 +63,7 @@ export const addLink = async (parent: any, args: any, context: any) => {
   return newLink;
 };
 
-export const updateLink = async (parent: any, args: any, context: any) => {
+export const updateLink = async (_: {}, args: MutationUpdateLinkArgs, context: GraphQLContext) => {
   const { id, url, description } = args;
   const { userId } = context;
 
@@ -62,6 +71,10 @@ export const updateLink = async (parent: any, args: any, context: any) => {
     const link = await context.prisma.link.findUnique({
       where: { id }
     });
+
+    if (!link) {
+      throw new Error('Did not find any link to update.');
+    }
 
     if (link.postedById !== userId) {
       throw new Error('Cannot update this link.');
@@ -81,7 +94,11 @@ export const updateLink = async (parent: any, args: any, context: any) => {
   }
 };
 
-export const deleteLink = async (parent: any, args: any, context: any) => {
+export const deleteLink = async (
+  parent: {},
+  args: MutationDeleteLinkArgs,
+  context: GraphQLContext
+) => {
   const { id } = args;
   const { userId } = context;
 
@@ -89,6 +106,10 @@ export const deleteLink = async (parent: any, args: any, context: any) => {
     const link = await context.prisma.link.findUnique({
       where: { id }
     });
+
+    if (!link) {
+      throw new Error('Did not find any link to delete.');
+    }
 
     if (link.postedById !== userId) {
       throw new Error('Cannot delete this link.');
@@ -104,8 +125,12 @@ export const deleteLink = async (parent: any, args: any, context: any) => {
   }
 };
 
-export const vote = async (parent: any, args: any, context: any) => {
+export const vote = async (_: {}, args: MutationVoteArgs, context: GraphQLContext) => {
   const userId = context.userId;
+
+  if (!userId) {
+    throw new Error('Did not find any user to add vote.');
+  }
 
   const vote = await context.prisma.vote.findUnique({
     where: {

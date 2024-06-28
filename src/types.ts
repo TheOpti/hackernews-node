@@ -5,6 +5,6 @@ import { PubSub } from 'graphql-subscriptions';
 export type GraphQLContext = {
   prisma: PrismaClient;
   pubsub: PubSub;
-  userId: string | null;
+  userId?: number;
   req?: Request;
 } & Record<string, unknown>;

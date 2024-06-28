@@ -9,6 +9,7 @@ export const getTokenPayload = (token: string): any => {
 export const getUserId = (req: any, authToken?: any) => {
   if (req) {
     const authHeader = req.headers.authorization;
+
     if (authHeader) {
       const token = authHeader.replace('Bearer ', '');
       if (!token) {
@@ -16,18 +17,18 @@ export const getUserId = (req: any, authToken?: any) => {
       }
 
       const { userId } = getTokenPayload(token);
-      return userId;
+      return parseInt(userId, 10);
     }
   }
 
   if (authToken) {
     const { userId } = getTokenPayload(authToken);
-    return userId;
+    return parseInt(userId, 10);
   }
 
   throw new Error('Not authenticated');
 };
 
 export const getUserIdFromWebSocket = (connectionParams: any) => {
-  return 'userId';
+  return 0;
 };
