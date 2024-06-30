@@ -30,9 +30,11 @@ type Mutation {
 
 type Link {
   id: IntID!
-  description: String!
+  title: String!
+  description: String
   url: String!
   postedBy: User
+  comments: [Comment!]
   votes: [Vote!]
 }
 
@@ -41,6 +43,12 @@ type User {
   name: String!
   email: String!
   links: [Link!]
+}
+
+type Comment {
+  id: IntID!
+  content: String!
+  author: User
 }
 
 type Vote {

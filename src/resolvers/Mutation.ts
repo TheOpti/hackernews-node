@@ -53,6 +53,7 @@ export const addLink = async (_: {}, args: MutationAddLinkArgs, context: GraphQL
   const newLink = await context.prisma.link.create({
     data: {
       url: args.url,
+      title: args.description,
       description: args.description,
       postedBy: { connect: { id: userId } }
     }

@@ -1,6 +1,7 @@
 import { linkTypedef } from './typedefs/link';
 import { userTypedef } from './typedefs/user';
 import { voteTypedef } from './typedefs/vote';
+import { commentTypedef } from './typedefs/comment';
 import { authPayloadTypedef } from './typedefs/authPayload';
 import { subscriptionTypedef } from './typedefs/subscription';
 
@@ -37,8 +38,10 @@ const typeDefs = `
   }
 
   ${linkTypedef}
-
+  
   ${userTypedef}
+  
+  ${commentTypedef}
 
   ${voteTypedef}
 

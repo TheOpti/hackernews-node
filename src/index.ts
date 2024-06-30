@@ -18,7 +18,8 @@ import cors from 'cors';
 import { logger } from './logger';
 import { getWebsocketShutdownPlugin } from './plugins/websocketShutdownPlugin';
 import { signup, login, addLink, updateLink, deleteLink, vote } from './resolvers/Mutation';
-import { postedBy, votes } from './resolvers/Link';
+import { author } from './resolvers/Comment';
+import { postedBy, votes, comments } from './resolvers/Link';
 import { feed } from './resolvers/Query';
 import { links } from './resolvers/User';
 import { link as voteLink, user as voteUser } from './resolvers/Vote';
@@ -50,7 +51,12 @@ const resolvers: Resolvers = {
 
   Link: {
     postedBy,
-    votes
+    votes,
+    comments
+  },
+
+  Comment: {
+    author
   },
 
   User: {
