@@ -1,5 +1,5 @@
 import { PubSub } from 'graphql-subscriptions';
-import { GraphQLContext } from '../types';
+import { GraphQLContext } from '../../types';
 
 export const subscribeToNewLink = (_: {}, __: {}, context: GraphQLContext) => {
   return context.pubsub.asyncIterator('NEW_LINK') as unknown as AsyncIterable<any>;

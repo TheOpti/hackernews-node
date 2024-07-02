@@ -1,5 +1,5 @@
-import { Link } from '../generated/graphql';
-import { GraphQLContext } from '../types';
+import { Link } from '../../generated/graphql';
+import { GraphQLContext } from '../../types';
 
 export const postedBy = (parent: Link, _: {}, context: GraphQLContext) => {
   return context.prisma.link.findUnique({ where: { id: parent.id } }).postedBy();

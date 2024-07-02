@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
-import { LinkOrderByInput, QueryFeedArgs } from '../generated/graphql';
-import { GraphQLContext } from '../types';
+import { LinkOrderByInput, QueryFeedArgs } from '../../generated/graphql';
+import { GraphQLContext } from '../../types';
 
 export const feed = async (_: {}, args: QueryFeedArgs, context: GraphQLContext) => {
   const where = args.filter

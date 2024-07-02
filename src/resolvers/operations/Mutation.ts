@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { GraphQLContext } from '../types';
+import { GraphQLContext } from '../../types';
 
-import { APP_SECRET } from '../utils';
+import { APP_SECRET } from '../../utils';
 import {
   MutationAddLinkArgs,
   MutationDeleteLinkArgs,
@@ -10,7 +10,7 @@ import {
   MutationSignupArgs,
   MutationUpdateLinkArgs,
   MutationVoteArgs
-} from '../generated/graphql';
+} from '../../generated/graphql';
 
 export const signup = async (_: {}, args: MutationSignupArgs, context: GraphQLContext) => {
   const password = await bcrypt.hash(args.password, 10);
