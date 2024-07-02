@@ -14,6 +14,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
   IntID: { input: number; output: number; }
 };
 
@@ -27,16 +28,20 @@ export type Comment = {
   __typename?: 'Comment';
   author?: Maybe<User>;
   content: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
   id: Scalars['IntID']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type Link = {
   __typename?: 'Link';
   comments?: Maybe<Array<Comment>>;
+  createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['IntID']['output'];
   postedBy?: Maybe<User>;
   title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
   url: Scalars['String']['output'];
   votes?: Maybe<Array<Vote>>;
 };
@@ -121,10 +126,12 @@ export type Subscription = {
 
 export type User = {
   __typename?: 'User';
+  createdAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
   id: Scalars['IntID']['output'];
   links?: Maybe<Array<Link>>;
   name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type Vote = {
@@ -208,6 +215,7 @@ export type ResolversTypes = {
   AuthPayload: ResolverTypeWrapper<AuthPayload>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Comment: ResolverTypeWrapper<Comment>;
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   IntID: ResolverTypeWrapper<Scalars['IntID']['output']>;
@@ -227,6 +235,7 @@ export type ResolversParentTypes = {
   AuthPayload: AuthPayload;
   Boolean: Scalars['Boolean']['output'];
   Comment: Comment;
+  DateTime: Scalars['DateTime']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   IntID: Scalars['IntID']['output'];
@@ -249,9 +258,15 @@ export type AuthPayloadResolvers<ContextType = any, ParentType extends Resolvers
 export type CommentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Comment'] = ResolversParentTypes['Comment']> = {
   author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['IntID'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
+
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime';
+}
 
 export interface IntIdScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['IntID'], any> {
   name: 'IntID';
@@ -259,10 +274,12 @@ export interface IntIdScalarConfig extends GraphQLScalarTypeConfig<ResolversType
 
 export type LinkResolvers<ContextType = any, ParentType extends ResolversParentTypes['Link'] = ResolversParentTypes['Link']> = {
   comments?: Resolver<Maybe<Array<ResolversTypes['Comment']>>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['IntID'], ParentType, ContextType>;
   postedBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   votes?: Resolver<Maybe<Array<ResolversTypes['Vote']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -289,10 +306,12 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['IntID'], ParentType, ContextType>;
   links?: Resolver<Maybe<Array<ResolversTypes['Link']>>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -306,6 +325,7 @@ export type VoteResolvers<ContextType = any, ParentType extends ResolversParentT
 export type Resolvers<ContextType = any> = {
   AuthPayload?: AuthPayloadResolvers<ContextType>;
   Comment?: CommentResolvers<ContextType>;
+  DateTime?: GraphQLScalarType;
   IntID?: GraphQLScalarType;
   Link?: LinkResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;

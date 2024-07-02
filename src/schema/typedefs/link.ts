@@ -7,5 +7,7 @@ export const linkTypedef = `
     postedBy: User
     comments: [Comment!]
     votes: [Vote!]
+    createdAt: DateTime!
+    updatedAt: DateTime!
   }
 `;

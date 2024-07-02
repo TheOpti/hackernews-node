@@ -8,6 +8,7 @@ import { subscriptionTypedef } from './typedefs/subscription';
 // GraphQL schema
 const typeDefs = `
   scalar IntID
+  scalar DateTime
 
   type Query {
     info: String!

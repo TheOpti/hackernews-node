@@ -3,5 +3,7 @@ export const commentTypedef = `
     id: IntID!
     content: String!
     author: User
+    createdAt: DateTime!
+    updatedAt: DateTime!
   }
 `;

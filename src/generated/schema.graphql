@@ -1,4 +1,5 @@
 scalar IntID
+scalar DateTime
 
 type Query {
   info: String!
@@ -36,6 +37,8 @@ type Link {
   postedBy: User
   comments: [Comment!]
   votes: [Vote!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type User {
@@ -43,12 +46,16 @@ type User {
   name: String!
   email: String!
   links: [Link!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Comment {
   id: IntID!
   content: String!
   author: User
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Vote {
