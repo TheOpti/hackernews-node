@@ -7,23 +7,49 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Link {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  description String
-  url         String
-  postedBy    User?    @relation(fields: [postedById], references: [id])
-  postedById  Int?
-  votes       Vote[]
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  password  String
+  profile   Profile?
+  links     Link[]
+  comments  Comment[]
+  votes     Vote[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  links     Link[]
+model Profile {
+  id       Int     @id @default(autoincrement())
+  bio      String?
+  userId   Int     @unique
+  user     User    @relation(fields: [userId], references: [id])
+}
+
+model Link {
+  id        Int       @id @default(autoincrement())
+  title     String
+  description   String?
+  url       String
+  imageUrl  String?
+  postedBy  User      @relation(fields: [postedById], references: [id])
+  postedById Int
+  comments  Comment[]
   votes     Vote[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Comment {
+  id        Int       @id @default(autoincrement())
+  content   String
+  linkId    Int
+  link      Link      @relation(fields: [linkId], references: [id])
+  authorId  Int
+  author    User      @relation(fields: [authorId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Vote {

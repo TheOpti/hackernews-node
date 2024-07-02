@@ -4,5 +4,7 @@ export const userTypedef = `
     name: String!
     email: String!
     links: [Link!]
+    createdAt: DateTime!
+    updatedAt: DateTime!
   }
 `;

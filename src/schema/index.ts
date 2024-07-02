@@ -1,12 +1,14 @@
 import { linkTypedef } from './typedefs/link';
 import { userTypedef } from './typedefs/user';
 import { voteTypedef } from './typedefs/vote';
+import { commentTypedef } from './typedefs/comment';
 import { authPayloadTypedef } from './typedefs/authPayload';
 import { subscriptionTypedef } from './typedefs/subscription';
 
 // GraphQL schema
 const typeDefs = `
   scalar IntID
+  scalar DateTime
 
   type Query {
     info: String!
@@ -37,8 +39,10 @@ const typeDefs = `
   }
 
   ${linkTypedef}
-
+  
   ${userTypedef}
+  
+  ${commentTypedef}
 
   ${voteTypedef}
 

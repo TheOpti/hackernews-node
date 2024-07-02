@@ -108,3 +108,4 @@ dist
 
 # Database file
 prisma/dev.db
+prisma/dev.db-journal

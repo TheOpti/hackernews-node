@@ -1,9 +1,13 @@
 export const linkTypedef = `
   type Link {
     id: IntID!
-    description: String!
+    title: String!
+    description: String
     url: String!
     postedBy: User
+    comments: [Comment!]
     votes: [Vote!]
+    createdAt: DateTime!
+    updatedAt: DateTime!
   }
 `;

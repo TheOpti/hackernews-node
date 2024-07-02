@@ -17,56 +17,15 @@ import cors from 'cors';
 
 import { logger } from './logger';
 import { getWebsocketShutdownPlugin } from './plugins/websocketShutdownPlugin';
-import { signup, login, addLink, updateLink, deleteLink, vote } from './resolvers/Mutation';
-import { postedBy, votes } from './resolvers/Link';
-import { feed } from './resolvers/Query';
-import { links } from './resolvers/User';
-import { link as voteLink, user as voteUser } from './resolvers/Vote';
-import { newLink, newVote } from './resolvers/Subscription';
 import typeDefs from './schema';
 import { getUserId, getUserIdFromWebSocket } from './utils';
 import { getLoggerPlugin } from './plugins/loggerPlugin';
-import { Resolvers } from './generated/graphql';
 import { GraphQLContext } from './types';
+import { resolvers } from './resolvers';
 
 const prisma = new PrismaClient();
 
 const pubsub = new PubSub();
-
-// Actual implementation of the GraphQL schema
-const resolvers: Resolvers = {
-  Query: {
-    feed
-  },
-
-  Mutation: {
-    signup,
-    login,
-    addLink,
-    updateLink,
-    deleteLink,
-    vote
-  },
-
-  Link: {
-    postedBy,
-    votes
-  },
-
-  User: {
-    links
-  },
-
-  Vote: {
-    link: voteLink,
-    user: voteUser
-  },
-
-  Subscription: {
-    newLink,
-    newVote
-  }
-};
 
 // Create schema, which will be used separately by ApolloServer and
 // the WebSocket server.
