@@ -5,11 +5,12 @@ import {
   MutationAddLinkArgs,
   MutationDeleteLinkArgs,
   MutationLoginArgs,
+  MutationRefreshTokenArgs,
   MutationSignupArgs,
   MutationUpdateLinkArgs,
   MutationVoteArgs
 } from '../../generated/graphql';
-import { createAccessToken, createRefreshToken } from '../../utils/jwt';
+import { createAccessToken, createRefreshToken, verifyRefreshToken } from '../../utils/jwt';
 
 export const signup = async (_: {}, args: MutationSignupArgs, context: GraphQLContext) => {
   const password = await bcrypt.hash(args.password, 10);
@@ -159,4 +160,31 @@ export const vote = async (_: {}, args: MutationVoteArgs, context: GraphQLContex
   context.pubsub.publish('NEW_VOTE', newVote);
 
   return newVote;
+};
+
+export const refreshToken = (_: {}, args: MutationRefreshTokenArgs, context: GraphQLContext) => {
+  const { refreshToken } = args;
+
+  if (!refreshToken) {
+    throw new Error('Missing refresh token');
+  }
+
+  try {
+    const { userId }: any = verifyRefreshToken(refreshToken);
+
+    // TODO: Verify if the refresh token exists in the database
+    // Store new refresh token in database
+    // Invalidate old refresh token (immediately or after a short grace period)
+
+    const newAccessToken = createAccessToken(userId);
+    const newRefreshToken = createRefreshToken(userId);
+
+    return {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+      username: ''
+    };
+  } catch (error) {
+    throw new Error('Invalid refresh token');
+  }
 };

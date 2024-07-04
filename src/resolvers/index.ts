@@ -2,7 +2,15 @@ import { Resolvers } from '../generated/graphql';
 import { author } from './entities/Comment';
 import { postedBy, votes, comments } from './entities/Link';
 import { links } from './entities/User';
-import { addLink, deleteLink, login, signup, updateLink, vote } from './operations/Mutation';
+import {
+  addLink,
+  deleteLink,
+  login,
+  refreshToken,
+  signup,
+  updateLink,
+  vote
+} from './operations/Mutation';
 import { link as voteLink, user as voteUser } from './entities/Vote';
 import { feed, me } from './operations/Query';
 import { newLink, newVote } from './operations/Subscription';
@@ -22,7 +30,8 @@ export const resolvers: Resolvers = {
     addLink,
     updateLink,
     deleteLink,
-    vote
+    vote,
+    refreshToken
   },
 
   Link: {

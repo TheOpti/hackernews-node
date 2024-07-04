@@ -6,7 +6,6 @@ import { authPayloadTypedef } from './typedefs/authPayload';
 import { subscriptionTypedef } from './typedefs/subscription';
 import { meTypedef } from './typedefs/loggedUser';
 
-// GraphQL schema
 const typeDefs = `
   scalar IntID
   scalar DateTime
@@ -38,6 +37,9 @@ const typeDefs = `
 
     # Add vote
     vote(linkId: ID!): Vote
+
+    # Refresh token
+    refreshToken(refreshToken: String!): AuthPayload
   }
 
   ${linkTypedef}

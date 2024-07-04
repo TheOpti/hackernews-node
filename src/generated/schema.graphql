@@ -28,6 +28,9 @@ type Mutation {
 
   # Add vote
   vote(linkId: ID!): Vote
+
+  # Refresh token
+  refreshToken(refreshToken: String!): AuthPayload
 }
 
 type Link {
