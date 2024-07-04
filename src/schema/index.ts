@@ -4,6 +4,7 @@ import { voteTypedef } from './typedefs/vote';
 import { commentTypedef } from './typedefs/comment';
 import { authPayloadTypedef } from './typedefs/authPayload';
 import { subscriptionTypedef } from './typedefs/subscription';
+import { meTypedef } from './typedefs/loggedUser';
 
 // GraphQL schema
 const typeDefs = `
@@ -11,7 +12,8 @@ const typeDefs = `
   scalar DateTime
 
   type Query {
-    info: String!
+    me: LoggedUser
+
     feed(filter: String, skip: Int, take: Int, orderBy: LinkOrderByInput): [Link!]!
   }
 
@@ -41,6 +43,8 @@ const typeDefs = `
   ${linkTypedef}
   
   ${userTypedef}
+
+  ${meTypedef}
   
   ${commentTypedef}
 

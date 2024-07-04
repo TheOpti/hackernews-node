@@ -1,6 +1,7 @@
 export const authPayloadTypedef = `
   type AuthPayload {
-    token: String
-    user: User
+    accessToken: String!
+    refreshToken: String!
+    username: String!
   }
 `;

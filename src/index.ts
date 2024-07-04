@@ -14,14 +14,15 @@ import { useServer } from 'graphql-ws/lib/use/ws';
 import { WebSocketServer } from 'ws';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import 'dotenv/config';
 
 import { logger } from './logger';
 import { getWebsocketShutdownPlugin } from './plugins/websocketShutdownPlugin';
 import typeDefs from './schema';
-import { getUserId, getUserIdFromWebSocket } from './utils';
 import { getLoggerPlugin } from './plugins/loggerPlugin';
 import { GraphQLContext } from './types';
 import { resolvers } from './resolvers';
+import { getUserId } from './utils/jwt';
 
 const prisma = new PrismaClient();
 
@@ -51,11 +52,11 @@ const httpContext = async ({ req }: { req: Request }): Promise<GraphQLContext> =
 });
 
 // For WebSocket connections
-const wsContext = async (connectionParams: any): Promise<GraphQLContext> => ({
+const wsContext = async (): Promise<GraphQLContext> => ({
   prisma,
   pubsub,
-  userId: await getUserIdFromWebSocket(connectionParams)
-  // Note: 'req' is not available here
+  // TODO Implement getting user id for WebSockets
+  userId: 0
 });
 
 const serverCleanup = useServer<GraphQLContext>({ schema, context: wsContext }, wsServer);

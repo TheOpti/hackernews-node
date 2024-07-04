@@ -4,24 +4,29 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
-export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = {
+  [_ in K]?: never;
+};
+export type Incremental<T> =
+  | T
+  | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string; }
-  String: { input: string; output: string; }
-  Boolean: { input: boolean; output: boolean; }
-  Int: { input: number; output: number; }
-  Float: { input: number; output: number; }
-  DateTime: { input: any; output: any; }
-  IntID: { input: number; output: number; }
+  ID: { input: string; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
+  DateTime: { input: any; output: any };
+  IntID: { input: number; output: number };
 };
 
 export type AuthPayload = {
   __typename?: 'AuthPayload';
-  token?: Maybe<Scalars['String']['output']>;
-  user?: Maybe<User>;
+  accessToken: Scalars['String']['output'];
+  refreshToken: Scalars['String']['output'];
+  username: Scalars['String']['output'];
 };
 
 export type Comment = {
@@ -52,6 +57,19 @@ export type LinkOrderByInput = {
   url?: InputMaybe<Sort>;
 };
 
+export type LoggedUser = {
+  __typename?: 'LoggedUser';
+  bio?: Maybe<Scalars['String']['output']>;
+  comments?: Maybe<Array<Maybe<Comment>>>;
+  createdAt: Scalars['DateTime']['output'];
+  email: Scalars['String']['output'];
+  id: Scalars['IntID']['output'];
+  links?: Maybe<Array<Maybe<Link>>>;
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  votes?: Maybe<Array<Maybe<Vote>>>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addLink: Link;
@@ -63,23 +81,19 @@ export type Mutation = {
   vote?: Maybe<Vote>;
 };
 
-
 export type MutationAddLinkArgs = {
   description: Scalars['String']['input'];
   url: Scalars['String']['input'];
 };
 
-
 export type MutationDeleteLinkArgs = {
   id: Scalars['Int']['input'];
 };
-
 
 export type MutationLoginArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
 };
-
 
 export type MutationSignupArgs = {
   email: Scalars['String']['input'];
@@ -87,13 +101,11 @@ export type MutationSignupArgs = {
   password: Scalars['String']['input'];
 };
 
-
 export type MutationUpdateLinkArgs = {
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['Int']['input'];
   url?: InputMaybe<Scalars['String']['input']>;
 };
-
 
 export type MutationVoteArgs = {
   linkId: Scalars['ID']['input'];
@@ -102,9 +114,8 @@ export type MutationVoteArgs = {
 export type Query = {
   __typename?: 'Query';
   feed: Array<Link>;
-  info: Scalars['String']['output'];
+  me?: Maybe<LoggedUser>;
 };
-
 
 export type QueryFeedArgs = {
   filter?: InputMaybe<Scalars['String']['input']>;
@@ -141,15 +152,14 @@ export type Vote = {
   user?: Maybe<User>;
 };
 
-
-
 export type ResolverTypeWrapper<T> = Promise<T> | T;
-
 
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
+  | ResolverFn<TResult, TParent, TContext, TArgs>
+  | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -172,7 +182,13 @@ export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
-export interface SubscriptionSubscriberObject<TResult, TKey extends string, TParent, TContext, TArgs> {
+export interface SubscriptionSubscriberObject<
+  TResult,
+  TKey extends string,
+  TParent,
+  TContext,
+  TArgs
+> {
   subscribe: SubscriptionSubscribeFn<{ [key in TKey]: TResult }, TParent, TContext, TArgs>;
   resolve?: SubscriptionResolveFn<TResult, { [key in TKey]: TResult }, TContext, TArgs>;
 }
@@ -186,7 +202,13 @@ export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, 
   | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
   | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
 
-export type SubscriptionResolver<TResult, TKey extends string, TParent = {}, TContext = {}, TArgs = {}> =
+export type SubscriptionResolver<
+  TResult,
+  TKey extends string,
+  TParent = {},
+  TContext = {},
+  TArgs = {}
+> =
   | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
   | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
 
@@ -196,7 +218,11 @@ export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   info: GraphQLResolveInfo
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
-export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
+export type IsTypeOfResolverFn<T = {}, TContext = {}> = (
+  obj: T,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
 
@@ -207,8 +233,6 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   context: TContext,
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
-
-
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
@@ -221,6 +245,7 @@ export type ResolversTypes = {
   IntID: ResolverTypeWrapper<Scalars['IntID']['output']>;
   Link: ResolverTypeWrapper<Link>;
   LinkOrderByInput: LinkOrderByInput;
+  LoggedUser: ResolverTypeWrapper<LoggedUser>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   Sort: Sort;
@@ -241,6 +266,7 @@ export type ResolversParentTypes = {
   IntID: Scalars['IntID']['output'];
   Link: Link;
   LinkOrderByInput: LinkOrderByInput;
+  LoggedUser: LoggedUser;
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
@@ -249,13 +275,20 @@ export type ResolversParentTypes = {
   Vote: Vote;
 };
 
-export type AuthPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = {
-  token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+export type AuthPayloadResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']
+> = {
+  accessToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  refreshToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type CommentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Comment'] = ResolversParentTypes['Comment']> = {
+export type CommentResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Comment'] = ResolversParentTypes['Comment']
+> = {
   author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -264,7 +297,8 @@ export type CommentResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+export interface DateTimeScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
 }
 
@@ -272,7 +306,10 @@ export interface IntIdScalarConfig extends GraphQLScalarTypeConfig<ResolversType
   name: 'IntID';
 }
 
-export type LinkResolvers<ContextType = any, ParentType extends ResolversParentTypes['Link'] = ResolversParentTypes['Link']> = {
+export type LinkResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Link'] = ResolversParentTypes['Link']
+> = {
   comments?: Resolver<Maybe<Array<ResolversTypes['Comment']>>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -285,27 +322,85 @@ export type LinkResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  addLink?: Resolver<ResolversTypes['Link'], ParentType, ContextType, RequireFields<MutationAddLinkArgs, 'description' | 'url'>>;
+export type LoggedUserResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['LoggedUser'] = ResolversParentTypes['LoggedUser']
+> = {
+  bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  comments?: Resolver<Maybe<Array<Maybe<ResolversTypes['Comment']>>>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['IntID'], ParentType, ContextType>;
+  links?: Resolver<Maybe<Array<Maybe<ResolversTypes['Link']>>>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  votes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Vote']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MutationResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
+> = {
+  addLink?: Resolver<
+    ResolversTypes['Link'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationAddLinkArgs, 'description' | 'url'>
+  >;
   deleteAllLinks?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  deleteLink?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationDeleteLinkArgs, 'id'>>;
-  login?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
-  signup?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationSignupArgs, 'email' | 'name' | 'password'>>;
-  updateLink?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationUpdateLinkArgs, 'id'>>;
-  vote?: Resolver<Maybe<ResolversTypes['Vote']>, ParentType, ContextType, RequireFields<MutationVoteArgs, 'linkId'>>;
+  deleteLink?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteLinkArgs, 'id'>
+  >;
+  login?: Resolver<
+    Maybe<ResolversTypes['AuthPayload']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationLoginArgs, 'email' | 'password'>
+  >;
+  signup?: Resolver<
+    Maybe<ResolversTypes['AuthPayload']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationSignupArgs, 'email' | 'name' | 'password'>
+  >;
+  updateLink?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateLinkArgs, 'id'>
+  >;
+  vote?: Resolver<
+    Maybe<ResolversTypes['Vote']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationVoteArgs, 'linkId'>
+  >;
 };
 
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+export type QueryResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
+> = {
   feed?: Resolver<Array<ResolversTypes['Link']>, ParentType, ContextType, Partial<QueryFeedArgs>>;
-  info?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  me?: Resolver<Maybe<ResolversTypes['LoggedUser']>, ParentType, ContextType>;
 };
 
-export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
-  newLink?: SubscriptionResolver<Maybe<ResolversTypes['Link']>, "newLink", ParentType, ContextType>;
-  newVote?: SubscriptionResolver<Maybe<ResolversTypes['Vote']>, "newVote", ParentType, ContextType>;
+export type SubscriptionResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']
+> = {
+  newLink?: SubscriptionResolver<Maybe<ResolversTypes['Link']>, 'newLink', ParentType, ContextType>;
+  newVote?: SubscriptionResolver<Maybe<ResolversTypes['Vote']>, 'newVote', ParentType, ContextType>;
 };
 
-export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+export type UserResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']
+> = {
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['IntID'], ParentType, ContextType>;
@@ -315,7 +410,10 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type VoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Vote'] = ResolversParentTypes['Vote']> = {
+export type VoteResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Vote'] = ResolversParentTypes['Vote']
+> = {
   id?: Resolver<ResolversTypes['IntID'], ParentType, ContextType>;
   link?: Resolver<Maybe<ResolversTypes['Link']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
@@ -328,10 +426,10 @@ export type Resolvers<ContextType = any> = {
   DateTime?: GraphQLScalarType;
   IntID?: GraphQLScalarType;
   Link?: LinkResolvers<ContextType>;
+  LoggedUser?: LoggedUserResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   Vote?: VoteResolvers<ContextType>;
 };
-

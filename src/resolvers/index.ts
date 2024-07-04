@@ -4,7 +4,7 @@ import { postedBy, votes, comments } from './entities/Link';
 import { links } from './entities/User';
 import { addLink, deleteLink, login, signup, updateLink, vote } from './operations/Mutation';
 import { link as voteLink, user as voteUser } from './entities/Vote';
-import { feed } from './operations/Query';
+import { feed, me } from './operations/Query';
 import { newLink, newVote } from './operations/Subscription';
 import { DateTime } from './scalars/datetime';
 
@@ -12,7 +12,8 @@ export const resolvers: Resolvers = {
   DateTime,
 
   Query: {
-    feed
+    feed,
+    me
   },
 
   Mutation: {

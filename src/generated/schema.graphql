@@ -2,7 +2,8 @@ scalar IntID
 scalar DateTime
 
 type Query {
-  info: String!
+  me: LoggedUser
+
   feed(filter: String, skip: Int, take: Int, orderBy: LinkOrderByInput): [Link!]!
 }
 
@@ -50,6 +51,18 @@ type User {
   updatedAt: DateTime!
 }
 
+type LoggedUser {
+  id: IntID!
+  name: String!
+  email: String!
+  links: [Link]
+  comments: [Comment]
+  votes: [Vote]
+  bio: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Comment {
   id: IntID!
   content: String!
@@ -65,8 +78,9 @@ type Vote {
 }
 
 type AuthPayload {
-  token: String
-  user: User
+  accessToken: String!
+  refreshToken: String!
+  username: String!
 }
 
 type Subscription {

@@ -1,8 +1,6 @@
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { GraphQLContext } from '../../types';
 
-import { APP_SECRET } from '../../utils';
 import {
   MutationAddLinkArgs,
   MutationDeleteLinkArgs,
@@ -11,17 +9,19 @@ import {
   MutationUpdateLinkArgs,
   MutationVoteArgs
 } from '../../generated/graphql';
+import { createAccessToken, createRefreshToken } from '../../utils/jwt';
 
 export const signup = async (_: {}, args: MutationSignupArgs, context: GraphQLContext) => {
   const password = await bcrypt.hash(args.password, 10);
   const user = await context.prisma.user.create({
     data: { ...args, password }
   });
-  const token = jwt.sign({ userId: user.id }, APP_SECRET);
 
+  // TODO Rethink registration what tokens should be returned
   return {
-    token,
-    user
+    accessToken: createAccessToken(user.id),
+    refreshToken: '',
+    username: user.name
   };
 };
 
@@ -34,16 +34,19 @@ export const login = async (_: {}, args: MutationLoginArgs, context: GraphQLCont
     throw new Error('Incorrect user or password.');
   }
 
-  const valid = await bcrypt.compare(args.password, user.password);
+  // TODO encrypt password in DB and here
+  const valid = args.password === user.password;
   if (!valid) {
     throw new Error('Invalid password.');
   }
 
-  const token = jwt.sign({ userId: user.id }, APP_SECRET);
+  const accessToken = createAccessToken(user.id);
+  const refreshToken = createRefreshToken(user.id);
 
   return {
-    token,
-    user
+    accessToken,
+    refreshToken,
+    username: user.name
   };
 };
 
