@@ -13,16 +13,31 @@ import {
 import { createAccessToken, createRefreshToken, verifyRefreshToken } from '../../utils/jwt';
 
 export const signup = async (_: {}, args: MutationSignupArgs, context: GraphQLContext) => {
-  const password = await bcryptjs.hash(args.password, 10);
-  const user = await context.prisma.user.create({
-    data: { ...args, password }
+  // TODO Add validation for registration fields
+  // TODO Send email with confirmation link
+  const salt = await bcryptjs.genSalt(10);
+  const hashedPassword = await bcryptjs.hash(args.password, salt);
+
+  const newUser = await context.prisma.user.create({
+    data: { ...args, password: hashedPassword, salt, refreshToken: '' }
+  });
+
+  const refreshToken = createRefreshToken(newUser.id);
+
+  await context.prisma.user.update({
+    where: {
+      id: newUser.id
+    },
+    data: {
+      refreshToken: refreshToken
+    }
   });
 
   // TODO Rethink registration what tokens should be returned
   return {
-    accessToken: createAccessToken(user.id),
-    refreshToken: '',
-    username: user.name
+    accessToken: createAccessToken(newUser.id),
+    refreshToken,
+    username: newUser.name
   };
 };
 
