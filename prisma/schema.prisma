@@ -8,48 +8,50 @@ generator client {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  name      String
-  email     String    @unique
-  password  String
-  profile   Profile?
-  links     Link[]
-  comments  Comment[]
-  votes     Vote[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id           Int       @id @default(autoincrement())
+  name         String
+  email        String    @unique
+  password     String
+  salt         String
+  refreshToken String
+  profile      Profile?
+  links        Link[]
+  comments     Comment[]
+  votes        Vote[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 }
 
 model Profile {
-  id       Int     @id @default(autoincrement())
-  bio      String?
-  userId   Int     @unique
-  user     User    @relation(fields: [userId], references: [id])
+  id     Int     @id @default(autoincrement())
+  bio    String?
+  userId Int     @unique
+  user   User    @relation(fields: [userId], references: [id])
 }
 
 model Link {
-  id        Int       @id @default(autoincrement())
-  title     String
-  description   String?
-  url       String
-  imageUrl  String?
-  postedBy  User      @relation(fields: [postedById], references: [id])
-  postedById Int
-  comments  Comment[]
-  votes     Vote[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  url         String
+  imageUrl    String?
+  postedBy    User      @relation(fields: [postedById], references: [id])
+  postedById  Int
+  comments    Comment[]
+  votes       Vote[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Comment {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   content   String
   linkId    Int
-  link      Link      @relation(fields: [linkId], references: [id])
+  link      Link     @relation(fields: [linkId], references: [id])
   authorId  Int
-  author    User      @relation(fields: [authorId], references: [id])
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Vote {

@@ -1,4 +1,4 @@
-import bcrypt from 'bcryptjs';
+import bcryptjs from 'bcryptjs';
 import { GraphQLContext } from '../../types';
 
 import {
@@ -13,7 +13,7 @@ import {
 import { createAccessToken, createRefreshToken, verifyRefreshToken } from '../../utils/jwt';
 
 export const signup = async (_: {}, args: MutationSignupArgs, context: GraphQLContext) => {
-  const password = await bcrypt.hash(args.password, 10);
+  const password = await bcryptjs.hash(args.password, 10);
   const user = await context.prisma.user.create({
     data: { ...args, password }
   });
@@ -35,18 +35,16 @@ export const login = async (_: {}, args: MutationLoginArgs, context: GraphQLCont
     throw new Error('Incorrect user or password.');
   }
 
-  // TODO encrypt password in DB and here
-  const valid = args.password === user.password;
-  if (!valid) {
+  const { password, salt } = user;
+  const hashedPassword = await bcryptjs.hash(password, salt);
+
+  if (args.password !== hashedPassword) {
     throw new Error('Invalid password.');
   }
 
-  const accessToken = createAccessToken(user.id);
-  const refreshToken = createRefreshToken(user.id);
-
   return {
-    accessToken,
-    refreshToken,
+    accessToken: createAccessToken(user.id),
+    refreshToken: createRefreshToken(user.id),
     username: user.name
   };
 };
@@ -162,7 +160,11 @@ export const vote = async (_: {}, args: MutationVoteArgs, context: GraphQLContex
   return newVote;
 };
 
-export const refreshToken = (_: {}, args: MutationRefreshTokenArgs, context: GraphQLContext) => {
+export const refreshToken = async (
+  _: {},
+  args: MutationRefreshTokenArgs,
+  context: GraphQLContext
+) => {
   const { refreshToken } = args;
 
   if (!refreshToken) {
@@ -170,14 +172,33 @@ export const refreshToken = (_: {}, args: MutationRefreshTokenArgs, context: Gra
   }
 
   try {
-    const { userId }: any = verifyRefreshToken(refreshToken);
+    const { userId: id }: any = verifyRefreshToken(refreshToken);
 
-    // TODO: Verify if the refresh token exists in the database
-    // Store new refresh token in database
-    // Invalidate old refresh token (immediately or after a short grace period)
+    const user = await context.prisma.user.findFirst({
+      where: {
+        id,
+        refreshToken
+      },
+      select: {
+        email: true
+      }
+    });
 
-    const newAccessToken = createAccessToken(userId);
-    const newRefreshToken = createRefreshToken(userId);
+    if (!user) {
+      throw new Error('Invalid refresh token');
+    }
+
+    const newAccessToken = createAccessToken(id);
+    const newRefreshToken = createRefreshToken(id);
+
+    await context.prisma.user.update({
+      where: {
+        id
+      },
+      data: {
+        refreshToken: newRefreshToken
+      }
+    });
 
     return {
       accessToken: newAccessToken,

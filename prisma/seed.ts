@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import bcryptjs from 'bcryptjs';
+import { createRefreshToken } from '../src/utils/jwt';
 
 const prisma = new PrismaClient();
 
@@ -345,11 +347,18 @@ async function main() {
 
   // Create users
   for (const userData of users) {
-    const { profile, createdAt, ...userFields } = userData;
+    const { profile, createdAt, password, ...userFields } = userData;
+
+    const salt = await bcryptjs.genSalt(10);
+    const hashedPassword = await bcryptjs.hash(password, salt);
+    const refreshToken = createRefreshToken(userData.id);
 
     const createdUser = await prisma.user.create({
       data: {
         ...userFields,
+        password: hashedPassword,
+        salt,
+        refreshToken,
         createdAt: new Date(createdAt),
         profile: {
           create: profile
