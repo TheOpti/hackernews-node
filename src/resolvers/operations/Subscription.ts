@@ -1,4 +1,5 @@
 import { PubSub } from 'graphql-subscriptions';
+
 import { GraphQLContext } from '../../types';
 
 export const subscribeToNewLink = (_: {}, __: {}, context: GraphQLContext) => {

@@ -1,4 +1,5 @@
-import { Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
+
 import { LinkOrderByInput, LoggedUser, QueryFeedArgs } from '../../generated/graphql';
 import { GraphQLContext } from '../../types';
 

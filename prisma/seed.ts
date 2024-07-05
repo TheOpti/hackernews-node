@@ -1,10 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import bcryptjs from 'bcryptjs';
+
 import { createRefreshToken } from '../src/utils/jwt';
 
 const prisma = new PrismaClient();
 
-require('dotenv').config();
+import 'dotenv/config';
 
 const password = process.env.TEST_USER_PASSWORD || 'secretPassword';
 

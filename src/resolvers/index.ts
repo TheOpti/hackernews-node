@@ -1,7 +1,7 @@
-import { Resolvers } from '../generated/graphql';
 import { author } from './entities/Comment';
 import { postedBy, votes, comments } from './entities/Link';
 import { links } from './entities/User';
+import { link as voteLink, user as voteUser } from './entities/Vote';
 import {
   addLink,
   deleteLink,
@@ -11,10 +11,10 @@ import {
   updateLink,
   vote
 } from './operations/Mutation';
-import { link as voteLink, user as voteUser } from './entities/Vote';
 import { feed, me } from './operations/Query';
 import { newLink, newVote } from './operations/Subscription';
 import { DateTime } from './scalars/datetime';
+import { Resolvers } from '../generated/graphql';
 
 export const resolvers: Resolvers = {
   DateTime,

@@ -1,10 +1,10 @@
+import { authPayloadTypedef } from './typedefs/authPayload';
+import { commentTypedef } from './typedefs/comment';
 import { linkTypedef } from './typedefs/link';
+import { meTypedef } from './typedefs/loggedUser';
+import { subscriptionTypedef } from './typedefs/subscription';
 import { userTypedef } from './typedefs/user';
 import { voteTypedef } from './typedefs/vote';
-import { commentTypedef } from './typedefs/comment';
-import { authPayloadTypedef } from './typedefs/authPayload';
-import { subscriptionTypedef } from './typedefs/subscription';
-import { meTypedef } from './typedefs/loggedUser';
 
 const typeDefs = `
   scalar IntID

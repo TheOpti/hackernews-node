@@ -1,27 +1,27 @@
-import { createServer } from 'http';
-import express, { Request } from 'express';
 import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import {
   ApolloServerPluginLandingPageLocalDefault,
   ApolloServerPluginLandingPageProductionDefault
 } from '@apollo/server/plugin/landingPage/default';
-import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import { expressMiddleware } from '@apollo/server/express4';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { PrismaClient } from '@prisma/client';
-import { PubSub } from 'graphql-subscriptions';
-import { useServer } from 'graphql-ws/lib/use/ws';
-import { WebSocketServer } from 'ws';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import express, { Request } from 'express';
+import { PubSub } from 'graphql-subscriptions';
+import { useServer } from 'graphql-ws/lib/use/ws';
+import { createServer } from 'http';
+import { WebSocketServer } from 'ws';
 import 'dotenv/config';
 
 import { logger } from './logger';
-import { getWebsocketShutdownPlugin } from './plugins/websocketShutdownPlugin';
-import typeDefs from './schema';
 import { getLoggerPlugin } from './plugins/loggerPlugin';
-import { GraphQLContext } from './types';
+import { getWebsocketShutdownPlugin } from './plugins/websocketShutdownPlugin';
 import { resolvers } from './resolvers';
+import typeDefs from './schema';
+import { GraphQLContext } from './types';
 import { getUserId } from './utils/jwt';
 
 const prisma = new PrismaClient();

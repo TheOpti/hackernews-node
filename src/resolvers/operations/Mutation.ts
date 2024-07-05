@@ -1,5 +1,4 @@
-import { GraphQLContext } from '../../types';
-import { createAccessToken, createRefreshToken, verifyRefreshToken } from '../../utils/jwt';
+import bcryptjs from 'bcryptjs';
 
 import {
   MutationAddLinkArgs,
@@ -10,7 +9,8 @@ import {
   MutationUpdateLinkArgs,
   MutationVoteArgs
 } from '../../generated/graphql';
-import bcryptjs from 'bcryptjs';
+import { GraphQLContext } from '../../types';
+import { createAccessToken, createRefreshToken, verifyRefreshToken } from '../../utils/jwt';
 
 export const signup = async (_: {}, args: MutationSignupArgs, context: GraphQLContext) => {
   // TODO Add validation for registration fields
@@ -159,7 +159,7 @@ export const vote = async (_: {}, args: MutationVoteArgs, context: GraphQLContex
     }
   });
 
-  if (Boolean(vote)) {
+  if (vote) {
     throw new Error(`Already voted for link: ${args.linkId}`);
   }
 

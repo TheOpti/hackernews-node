@@ -3,6 +3,7 @@ import {
   GraphQLRequestContext,
   GraphQLRequestContextDidEncounterErrors
 } from '@apollo/server';
+
 import { logger } from '../logger';
 
 export const getLoggerPlugin = () => ({
