@@ -1,5 +1,5 @@
-import bcryptjs from 'bcryptjs';
 import { GraphQLContext } from '../../types';
+import { createAccessToken, createRefreshToken, verifyRefreshToken } from '../../utils/jwt';
 
 import {
   MutationAddLinkArgs,
@@ -10,7 +10,7 @@ import {
   MutationUpdateLinkArgs,
   MutationVoteArgs
 } from '../../generated/graphql';
-import { createAccessToken, createRefreshToken, verifyRefreshToken } from '../../utils/jwt';
+import bcryptjs from 'bcryptjs';
 
 export const signup = async (_: {}, args: MutationSignupArgs, context: GraphQLContext) => {
   // TODO Add validation for registration fields
