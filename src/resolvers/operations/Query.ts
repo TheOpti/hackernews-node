@@ -4,6 +4,7 @@ import { LinkOrderByInput, LoggedUser, QueryFeedArgs } from '../../generated/gra
 import { GraphQLContext } from '../../types';
 
 export const feed = async (_: {}, args: QueryFeedArgs, context: GraphQLContext) => {
+  console.log('!!! feed resolver ----');
   const where = args.filter
     ? {
         OR: [{ description: { contains: args.filter } }, { url: { contains: args.filter } }]
@@ -14,7 +15,11 @@ export const feed = async (_: {}, args: QueryFeedArgs, context: GraphQLContext) 
     where,
     skip: args.skip ?? undefined,
     take: args.take ?? undefined,
-    orderBy: convertOrderBy(args.orderBy)
+    orderBy: convertOrderBy(args.orderBy),
+    include: {
+      comments: true,
+      votes: true
+    }
   });
 };
 

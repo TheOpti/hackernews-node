@@ -7,6 +7,8 @@ export const linkTypedef = `
     postedBy: User
     comments: [Comment!]
     votes: [Vote!]
+    numberOfComments: Int
+    numberOfVotes: Int
     createdAt: DateTime!
     updatedAt: DateTime!
   }

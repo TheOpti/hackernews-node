@@ -1,5 +1,5 @@
 import { author } from './entities/Comment';
-import { postedBy, votes, comments } from './entities/Link';
+import { postedBy, votes, comments, numberOfComments, numberOfVotes } from './entities/Link';
 import { links } from './entities/User';
 import { link as voteLink, user as voteUser } from './entities/Vote';
 import {
@@ -37,7 +37,9 @@ export const resolvers: Resolvers = {
   Link: {
     postedBy,
     votes,
-    comments
+    comments,
+    numberOfComments,
+    numberOfVotes
   },
 
   Comment: {
