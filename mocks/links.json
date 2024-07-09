@@ -1,0 +1,180 @@
+[
+  {
+    "id": 1,
+    "url": "https://www.breck-mckye.com/blog/2023/05/Microfrontends-should-be-your-last-resort/",
+    "title": "Microfrontends should be your last resort",
+    "createdAt": 1719080400368,
+    "postedById": 1
+  },
+  {
+    "id": 2,
+    "url": "https://joshcollinsworth.com/blog/antiquated-react",
+    "title": "Things you forgot (or never knew) because of React",
+    "createdAt": 1715228548000,
+    "postedById": 2
+  },
+  {
+    "id": 3,
+    "url": "https://jakelazaroff.com/words/web-components-will-outlive-your-javascript-framework/",
+    "title": "Web Components Will Outlive Your JavaScript Framework",
+    "createdAt": 1715228548000,
+    "postedById": 3
+  },
+  {
+    "id": 4,
+    "url": "https://htmx.org/essays/is-htmx-another-javascript-framework/",
+    "title": "Is htmx Just Another JavaScript Framework?",
+    "createdAt": 1715228548000,
+    "postedById": 1
+  },
+  {
+    "id": 5,
+    "url": "https://openai.com/index/hello-gpt-4o/",
+    "title": "Hello GPT-4o",
+    "createdAt": 1715228548000,
+    "postedById": 1
+  },
+  {
+    "id": 6,
+    "url": "https://jeanhsu.substack.com/p/ask-vs-guess-culture",
+    "title": "Ask vs guess culture",
+    "description": "When unreasonable requests are followed up with \"but you could have just said no!\" Exploring the clashes of ask culture and guess culture, at home and at work.",
+    "createdAt": 1718355059368,
+    "postedById": 2
+  },
+  {
+    "id": 7,
+    "url": "https://www.freecodecamp.org/news/agile-software-development-handbook/",
+    "title": "Agile Software Development Handbook",
+    "description": "In the fast-paced and ever-evolving world of software development, there's always a need for flexibility, adaptability, and responsiveness.",
+    "createdAt": 1719464784368,
+    "postedById": 3
+  },
+  {
+    "id": 8,
+    "url": "https://web.dev/ta-code-coverage/",
+    "title": "Four common types of code coverage",
+    "description": "Learn what code coverage is and discover four common ways to measure it.",
+    "createdAt": 1715524887684,
+    "postedById": 3
+  },
+  {
+    "id": 9,
+    "url": "https://blog.openreplay.com/prefetching-preloading-and-prerendering-in-html/",
+    "title": "Prefetching, Preloading, And Prerendering In HTML",
+    "description": "Optimizing page load times is very important, and this article will explain three techniques —prefetching, preloading, and prerendering— that can help you squeeze higher performance out of your web pages.",
+    "createdAt": 1712336484368,
+    "postedById": 4
+  },
+  {
+    "id": 10,
+    "url": "https://www.postman.com/state-of-api/",
+    "title": "2023 State of the API Report",
+    "description": "For the fifth year, the State of the API is the world's largest and most comprehensive survey and report on APIs. More than 40,000 developers and API professionals have shared their thoughts on development priorities, their API tools, and where they see APIs going.",
+    "createdAt": 1714168828211,
+    "postedById": 1
+  },
+  {
+    "id": 11,
+    "url": "https://ruurtjan.medium.com/understanding-kafka-with-factorio-74e8fc9bf181",
+    "title": "Understanding Kafka with Factorio",
+    "description": "Understanding Kafka with Factorio",
+    "createdAt": 1716285760368,
+    "postedById": 2
+  },
+  {
+    "id": 12,
+    "url": "https://www.youtube.com/watch?v=r-GSGH2RxJs",
+    "title": "htmx in 100 seconds",
+    "description": "Learn the basics of htmx - an HTML-focused UI library that can handle data fetching and rendering in web applications without complex JavaScript code or frameworks. ",
+    "createdAt": 1716073133000,
+    "postedById": 5
+  },
+  {
+    "id": 13,
+    "url": "https://themer.dev/blog/the-single-most-important-factor-that-differentiates-front-end-frameworks",
+    "title": "The single most important factor that differentiates front-end frameworks",
+    "description": "There are tons of blog posts on the internet about how frameworks differ and which one to pick for your next web project. Usually they cover a few aspects of the framework like syntax, development setup, and community size.",
+    "createdAt": 1715393710368,
+    "postedById": 6
+  },
+  {
+    "id": 14,
+    "url": "https://github.com/dabeaz-course/python-mastery",
+    "title": "Advanced Python Mastery",
+    "description": "An exercise-driven course on Advanced Python Programming that was battle-tested several hundred times on the corporate-training circuit for more than a decade.",
+    "createdAt": 1719699584000,
+    "postedById": 7
+  },
+  {
+    "id": 15,
+    "url": "https://www.freecodecamp.org/news/git-rebase-handbook/",
+    "title": "The Git Rebase Handbook – A Definitive Guide to Rebasing",
+    "createdAt": 1718571856368,
+    "postedById": 8
+  },
+  {
+    "id": 16,
+    "url": "https://www.databasestar.com/database-normalization/",
+    "title": "Database Normalization: A Step-By-Step-Guide With Examples",
+    "description": "One of the most powerful tools a developer can have in their toolbox is git rebase. Yet it is notorious for being complex and misunderstood.",
+    "createdAt": 1718958187008,
+    "postedById": 9
+  },
+  {
+    "id": 17,
+    "url": "https://stytch.com/blog/jwts-vs-sessions-which-is-right-for-you/",
+    "title": "JWTs vs. sessions: which authentication approach is right for you?",
+    "description": "Your application just received a login request, and the credentials passed successfully to prove the identity of a user in your system. Wonderful, you have a high degree of confidence in who this user is and what they should be able to access!",
+    "createdAt": 1714541248068,
+    "postedById": 10
+  },
+  {
+    "id": 18,
+    "url": "https://dev.to/stripe/common-design-patterns-at-stripe-1hb4",
+    "title": "Common design patterns at Stripe",
+    "description": "You might disagree with how the Stripe API is designed, and the design you end up with is likely going to be different than what we use.",
+    "createdAt": 1715994862368,
+    "postedById": 5
+  },
+  {
+    "id": 19,
+    "url": "https://blog.curiosity.ai/10-hottest-new-productivity-apps-may-2024-4ced554c337c",
+    "title": "10 Hottest New Productivity Apps - May 2024",
+    "description": "Meet the 10 most upvoted apps in May — via ProductHunt.",
+    "createdAt": 1715000412360,
+    "postedById": 5
+  },
+  {
+    "id": 20,
+    "url": "https://hybridhacker.email/p/thoughts-on-code-reviews",
+    "title": "Thoughts on Code Reviews",
+    "description": "Why so many teams mess them up, and a modest proposal to do them better.",
+    "createdAt": 1716890640322,
+    "postedById": 6
+  },
+  {
+    "id": 21,
+    "url": "https://weekendprogrammer.substack.com/p/technical-debt-101-a-short-quick",
+    "title": "Technical Debt 101: A Short Quick Guide",
+    "description": "Learn the origins, causes and tips to reduce technical debt in your project",
+    "createdAt": 1719476668399,
+    "postedById": 7
+  },
+  {
+    "id": 22,
+    "url": "https://yekta.dev/posts/dont-microservice-do-module/",
+    "title": "Don't Microservice, Do Module",
+    "description": "The excessive use of microservices is still widespread, and this is bad for the earth! I assumed it was common knowledge by now, but I was very wrong. This article aims to clearly explain why you should minimize or eliminate the use of microservices and opt for properly structured modular systems (or any better alternative) instead.",
+    "createdAt": 1719614680368,
+    "postedById": 4
+  },
+  {
+    "id": 23,
+    "url": "https://blog.google/technology/ai/google-io-2024-100-announcements/",
+    "title": "100 things we announced at I/O 2024",
+    "description": "A lot happened at I/O 2024! Whether you were most into the latest Gemini app updates, felt especially excited about what’s coming for developers or can’t wait to try the latest generative AI tools, there was something for just about everyone. Don’t believe us? Below, we rounded up 100 things we announced over the last two days.",
+    "createdAt": 1713829307368,
+    "postedById": 8
+  }
+]

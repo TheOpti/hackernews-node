@@ -1,0 +1,164 @@
+[
+  {
+    "content": "I think microfrontends are the ultimate extension of what I call \"the myth of code reuse\".\nEveryone thinks because they can create \"small reusable slices\" of full frontend code that this comes for free without a load of problems that get in the way of the mythical land. The only issue is everyone who has tried microfrontends is universally full of regret.\nOther attempts at this are:\n1) having an enforced centralised library of components (this just about works) - how this is managed and the engagement with other teams is critical.\n2) turn everything into an npm package and create version hell at the end of a sprint as hundreds of devs try to version bump everything and the main package.json all at the same time.\n3) free for all with moving people regularly between teams. This is the best solution because best practices automatically filter their way through each team through the people and everyone learns and gets on with each other in a human way that allows real collaboration.\n4) splitting vertically rather than by components so one team does the search UI another does the homepage another does the product detail etc. but hopefully in the same technology!\nOr you could probably just reduce the number of people adding pointless features to your ecommerce site... Ah there is five of you and you did microfrontends didn't you, I can't and won't help you then :-/",
+    "linkId": 1,
+    "authorId": 5,
+    "createdAt": 1709747599601
+  },
+  {
+    "content": "Microfrontends are about independent development, not code reuse. They work fine if you understand their purpose.",
+    "linkId": 1,
+    "authorId": 3,
+    "createdAt": 1708518307895
+  },
+  {
+    "content": "I was on an MFE team earlier this year. It was sold to higher-ups as being for both, but I think in most cases it's bad for both. IME, it was sold in terms of code code-reuse by providing things like shared navigation bars, shared authentication logic, etc.\nMy team, at least, did not have the necessary support structures in place to help others who wanted to maintain their own UI. I see this mostly when crossing framework/language boundaries (mixing React + Angular in a SPA, as it was in my case). They declare microfrontends, but then all the component libraries were all React-based anyways.\nIt just ended up being a mess of N deployment processes, N build systems, N storage buckets, zero standardization whatsoever, and mountains of technical debt, all without much benefit.",
+    "linkId": 1,
+    "authorId": 4,
+    "createdAt": 1720383050058
+  },
+  {
+    "content": "How many times per second do you think awk, grep, sed, et al are being used right now?\nComposable tools exist. Whatever horseshit is going on around ANY bigger sized application is not. Excel, any random React app, GIMP… sure, compositional engineer might be taking place WITHIN the application, but it is barely composable beyond a Copy, Paste, Save As dialog and the ability to arrange the window with other windows.\nCan’t you see how things immediately invert and turn inwards, away from interaction, away from composability, the moment the turn towards structured interfaces begins?\nAn API is a narcissist. You have to live in its world. A Unix pipe is a communist.",
+    "linkId": 1,
+    "authorId": 8,
+    "createdAt": 1709490102728
+  },
+  {
+    "content": "Years ago, long BC, I was at a tech conference and the CTO of a local tech giant gave a talk on micro services that was very good and touched on some of these same points. They, in fact, refactored in the monolith and then broke it out into micro services but, surprisingly, never shipped the refactored monolith ... they just kept it running full test suites as more and more of its features were carved off into micro services until the test suites were running entirely on the micro services. They shipped that.\nDuring the Q&A somebody asked a question about their company's struggle to move their monolith to micro services and the CTO asked two questions that, at the time, was very illuminating: how many teams did they have and how many developers were in their tooling team. When they said they had a relatively small team the CTO said \"you don't have any of the problems micro services solve, why are you switching\".",
+    "linkId": 1,
+    "authorId": 7,
+    "createdAt": 1710232712830
+  },
+  {
+    "content": "Micro frontends are mostly trying to solve organizational issues, from what I’ve seen. You have some teams or individuals who really want to use a different tech for their project, or get away from legacy code without rewriting it, etc.\nI interviewed at a place a couple months ago that was looking for an front end architect, and all the assumptions and questioning were that their use of microfrontends (both angular and react) was a good thing and how would I make teams follow this approach.\nThey passed on me when I made it clear that I didn’t think it was a very good approach for their smallish team, and in general that the challenges they were experiencing were mostly because of this architecture, not solved by it.",
+    "linkId": 1,
+    "authorId": 2,
+    "createdAt": 1716659697660
+  },
+  {
+    "content": "I like react/jsx precisely because I can use language constructs like filter, map, reduce, etc, instead of a custom implementation of basic things like if statements and loops. I find this much more ergonomic and didn’t realise some people see this as a “workaround”.\nWorth also pointing out that when you write these templates, as strings or template literals, they might resemble HTML in appearance but really have no relation to actual HTML except what they output after processing. All of the added directives also have no equivalence in HTML. You’re just writing JS indirectly.",
+    "linkId": 2,
+    "authorId": 3,
+    "createdAt": 1709678376242
+  },
+  {
+    "content": "In general I really like React but after spending years tinkering with JS and seeing my codebases rot away faster than I could keep up due to ecosystem/tooling churn (I started in 2014 when React was ES5 and still using mixins), I started replacing my frontends with regular server-side rendered ones. I enrich these with vanilla JS and some smart things like using async fetch and the history API to seamlessly replace content when clicking links. There are of course solutions like HTMX or Turbolinks that do similar things but it's really easy to make something simple work with just JS\nWith some of these tricks the resulting application feels very similar to a real SPA. Of course if you're really building an application in the sense that a lot of the computation and state handling happens in the browser you will still need to use JS, but even then I would just go with vanilla JS in most cases. That said my experience is from building mostly CRUD-like apps alone or in small teams, so I can see the benefit of more complex toolchains in larger organizations.\nBut yeah, browsers and JS offer so much out of the box, most people don't seem to realize how easy it is to do cool things without relying on frameworks.",
+    "linkId": 2,
+    "authorId": 4,
+    "createdAt": 1709066300342
+  },
+  {
+    "content": "Web Components have got to be the single most overrated web feature I've ever witnessed in the many years I've been messing around with browsers. You know, even WITH React and no Web Components, there was already a pretty reliable way to integrate third party libraries into React without a ton of glue: the DOM. Like for example, if you want to integrate a text editor like Monaco or Quill, basically all you have to do is give it a DOM node and tie together whatever props/events/bindings you want. You don't really need monaco-react, which is not even a large library to begin with.\nThe main reason why React is still popular is, drum roll please... The programming model. JSX is not an antiquated idea, it is still one of the better ways to integrate the UI part of a JS application into the JS part directly. I greatly prefer JS logic inside of my HTML versus a bespoke template language specifically because it's easy to compose and construct complex logic in.\nI've been messing around with Svelte a bit in spare time. I really like Svelte and will probably continue to use it, but the two things I will note is:\n- The integration with Web Components is imperfect and doesn't really hit me as something I would seek out.\n- The templating logic in the HTML feels decidedly inferior versus just being able to use JS logic and JSX. Try doing a for loop where you count up; the best answer I could find on the internet was to construct an Array using `Array(number)` and enumerate over it...\nWhat I really want is actually more like React's programming model with Svelte's \"compiling down to nothing\" mantra.\nBut this Web Components fervor, I know people get very heated about it, but I strongly believe that in 10 years it's going to be one of those grotesquely complex legacy features nobody can get rid of.",
+    "linkId": 2,
+    "authorId": 1,
+    "createdAt": 1709436906843
+  },
+  {
+    "content": "I think the people expressing negativity about hooks are a small minority. Hooks are a massive step up from class component lifetime methods, and the composability of hooks can lead to some very clean and powerful code if you know what you're doing. We're using hooks at work, with rules-of-hooks linting, and I can't remember the last time we had an issue or bug because of hook semantics",
+    "linkId": 2,
+    "authorId": 9,
+    "createdAt": 1707974197114
+  },
+  {
+    "content": "The thing that this article is missing is that we use JavaScript in these places because compatibility is better. We can even use new JavaScript by transpiling, but polyfilling missing CSS and HTML is a lot harder to do and impossible in some cases (not to mention your polyfill will use JavaScript).\n`appearance` has a lot of caveats on MDN about testing it thoroughly if you're going to use it—even `appearance: none`. This may matter less if you only have to support new browsers, but keep in mind that old versions of Safari stay in circulation longer than you might think.\n`datalist` does nothing on Firefox Android. It just shows to me as an input box with no functionality at all (not even the suggestions over the keyboard that others report in Chrome Android).\nThe color picker is neat, but extremely nonstandard, which is a dealbreaker for most businesses not just because the designers will complain but because customer support will find it harder to help people. Chromium provides the functionality to pick on a page and pick literally any color, but Firefox Android only gives me the rainbow, a gray, and black and white.\nThe article itself acknowledges the inconsistencies with `details` and `dialog`.\nI hope we eventually get to a place where browsers that don't support these features (and support them consistently with each other) are no longer used, but in the meantime these elements will only find their way into my side projects, where I have full control of which browsers I support.",
+    "linkId": 3,
+    "authorId": 3,
+    "createdAt": 1717463626574
+  },
+  {
+    "content": "just because htmx (which is a library, not a framework) was mentioned, I'm going to respond to some stuff in the article\nfirst and foremost, the article doesn't talk about synchronizing state w/a server, which is what htmx is focuses on (via hypermedia exchanges), so htmx is orthogonal to WebComponents in this regard\n> There’s a cost to using dependencies. New versions are released, APIs change, and it takes time and effort to make sure your own code remains compatible with them.\nThis is why htmx is dependency-free and focuses intensely on backwards compatibility (e.g. it is IE11 compatible). intercooler.js, which was htmx 1.0 and has one dependency, jQuery, was released in 2013 and is still supported. A lot of other javascript libraries have a culture of API rewrites and difficult upgrades, but htmx is explicitly not like that and shouldn't be heaped into that general culture. In htmx 2.0, our only breaking change is likely to be dropping IE support.\nWill web components outlive htmx? Well, they are part of the browser, so presumably yes. But, insofar as I can help it, htmx should be very stable and churn free going forward. The API is basically correct (yes, w/ a few warts and mistakes) and I see no need to rewrite everything for the sake of purity or sexiness.\nAnd, most importantly, htmx answers a different question than Web Components: how should I synchronize state w/ the server.",
+    "linkId": 4,
+    "authorId": 1,
+    "createdAt": 1710302511266
+  },
+  {
+    "content": "We're replacing React with Htmx at work (about a year into it) and have found WebComponents to be very useful to re-use some of the React components that we want to preserve and treat a bit like using native browser widgets (input, select, textarea). Specifically, a WebComponent lets you hook into the lifecycle of a DOM element that is being modified by the outside world (morphdom via Htmx). In the event of attributes changing, you want to tell the React component about that. And in the event of the node being removed from the DOM, you want to tell React to run its cleanup procedures. I think that we weren't able to do this in a clean, efficient way without WebComponents.",
+    "linkId": 4,
+    "authorId": 2,
+    "createdAt": 1706907331834
+  },
+  {
+    "content": "that's great to hear and confirms my intuition that web components and htmx would go very well together",
+    "linkId": 4,
+    "authorId": 3,
+    "createdAt": 1714233269400
+  },
+  {
+    "content": "HTMX aims to render itself obsolete by serving as a proof of concept to advance the HTML specification. In various interviews and blog posts, Carson has mentioned that jQuery was essential only until browsers implemented features like `querySelectorAll`.\nThe discussion about Library vs. Framework misses the core objective of the HTMX project.",
+    "linkId": 4,
+    "authorId": 4,
+    "createdAt": 1707672729121
+  },
+  {
+    "content": "When I initially read the htmx documentation I was confused because it kept talking about a hypermedia client. The context clues suggested they were referring to htmx but my brain kept saying \"isn't the browser the hypermedia client?\" Eventually it sank in that htmx is an extension of the hypermedia client. When I first tried to use htmx I experienced a lot of discomfort regarding areas where htmx feels non-standard, such as redirects in the hx- readers on a 200 response. Once I understood that htmx is explicitly trying to move the boundary of the hypermedia client a lot of that discomfort melted away.",
+    "linkId": 4,
+    "authorId": 5,
+    "createdAt": 1711148282169
+  },
+  {
+    "content": "HTMX breaks the \"separation of concerns\" paradigm. It's not going to help anyone doing anything complex, and it's going to be a crutch for anyone getting started. It breaks down quickly when the problem is anything more complex than clicking a button to load some content, and then what - rewrite everything in a more capable framework?",
+    "linkId": 4,
+    "authorId": 9,
+    "createdAt": 1715587504214
+  },
+  {
+    "content": "The most impressive part is that the voice uses the right feelings and tonal language during the presentation. I'm not sure how much of that was that they had tested this over and over, but it is really hard to get that right so if they didn't fake it in some way I'd say that is revolutionary.",
+    "linkId": 5,
+    "authorId": 2,
+    "createdAt": 1708103791443
+  },
+  {
+    "content": "(I work at OpenAI.)\nIt's really how it works.",
+    "linkId": 5,
+    "authorId": 6,
+    "createdAt": 1710955136545
+  },
+  {
+    "content": "How far are we away from something like a helmet with chat GPT and a video camera installed, I imagine this will be awesome for low vision people. Imagine having a guide tell you how to walk to the grocery store, and help you grocery shop without an assistant. Of course you have tons of liability issues here, but this is very impressive",
+    "linkId": 5,
+    "authorId": 8,
+    "createdAt": 1717395698128
+  },
+  {
+    "content": "Very interesting and extremely impressive!\nI tried using the voice chat in their app previously and was disappointed. The big UX problem was that it didn't try to understand when I had finished speaking. English is a second language and I paused a bit too long thinking of a word and it just started responding to my obviously half spoken sentence. Trying again it just became stressful as I had to rush my words out to avoid an annoying response to an unfinished thought.\nI didn't try interrupting it but judging by the comments here it was not possible.\nIt was very surprising to me to be so overtly exposed to the nuances of real conversation. Just this one thing of not understanding when it's your turn to talk made the interaction very unpleasant, more than I would have expected.\nOn that note, I noticed that the AI in the demo seems to be very rambly. It almost always just kept talking and many statements were reiterations of previous ones. It reminded me of a type of youtuber that uses a lot of filler phrases like \"let's go ahead and ...\", just to be more verbose and lessen silences.\nMost of the statements by the guy doing the demo were interrupting the AI.\nIt's still extremely impressive but I found this interesting enough to share. It will be exciting to see how hard it is to reproduce these abilities in the open, and to solve this issue.",
+    "linkId": 5,
+    "authorId": 2,
+    "createdAt": 1719949659440
+  },
+  {
+    "content": "Very, very impressive for a \"minor\" release demo. The capabilities here would look shockingly advanced just 5 years ago.\nUniversal translator, pair programmer, completely human sounding voice assistant and all in real time. Scifi tropes made real.\nBut: Interesting next to see how it actually performs IRL latency and without cherry-picking. No snark, it was great but need to see real world power. Also what the benefits are to subscribers if all this is going to be free...",
+    "linkId": 5,
+    "authorId": 1,
+    "createdAt": 1718571096775
+  },
+  {
+    "content": "The capabilities here look shocking advanced yesterday.",
+    "linkId": 5,
+    "authorId": 7,
+    "createdAt": 1710143172629
+  },
+  {
+    "content": "This was confusing at first, but now I get it.",
+    "linkId": 3,
+    "authorId": 1,
+    "createdAt": 1706715256777
+  },
+  {
+    "content": "For those wanting to get better at hearing no, I heard of a guy that invented a rejection game to play with himself. To desensitize himself to the fear of rejection (hearing \"no\"), he started asking people for things they would definitely say no to in low stakes scenarios. For example, asking a stranger to borrow their car or if they want a bite of his sandwich he already took a bite out of. Ask the person at the deli counter if you can slice your own meat, go to the register to buy a pair of shoes and ask the cashier if they can be free today. There are decks of cards with suggestions if you want to look into it but I think relying on your own creativity is free and easy enough ;)",
+    "linkId": 3,
+    "authorId": 2,
+    "createdAt": 1709081626771
+  },
+  {
+    "content": "I would say the difference here is more one of insecurity. The \"guess culture\" is one of insecure people – afraid to refuse anyone else and afraid to be refused. I see many people with an almost pathological need to hide their desires, in a way it is closing yourself off from the world. In expressing your true feelings you create a degree of intimacy with the other person. Being truthful gives others a kind of power over you and many try their hardest to avoid such vulnerable states.",
+    "linkId": 3,
+    "authorId": 7,
+    "createdAt": 1706781075731
+  },
+  {
+    "content": "Does anyone have more resources on this?",
+    "linkId": 5,
+    "authorId": 5,
+    "createdAt": 1719600423915
+  }
+]
