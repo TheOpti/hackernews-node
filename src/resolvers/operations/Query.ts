@@ -4,7 +4,6 @@ import { LinkOrderByInput, LoggedUser, QueryFeedArgs } from '../../generated/gra
 import { GraphQLContext } from '../../types';
 
 export const feed = async (_: {}, args: QueryFeedArgs, context: GraphQLContext) => {
-  console.log('!!! feed resolver ----');
   const where = args.filter
     ? {
         OR: [{ description: { contains: args.filter } }, { url: { contains: args.filter } }]
@@ -62,8 +61,6 @@ export const me = async (_: {}, __: {}, context: GraphQLContext) => {
   if (!user) {
     return null;
   }
-
-  console.log('Found user ', user);
 
   return {
     id: user.id,
