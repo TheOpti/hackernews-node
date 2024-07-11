@@ -51,15 +51,26 @@ export const login = async (_: {}, args: MutationLoginArgs, context: GraphQLCont
   }
 
   const { password, salt } = user;
-  const hashedPassword = await bcryptjs.hash(password, salt);
+  const hashedProvidedPassword = await bcryptjs.hash(args.password, salt);
 
-  if (args.password !== hashedPassword) {
+  if (hashedProvidedPassword !== password) {
     throw new Error('Invalid password.');
   }
 
+  const newRefreshToken = createRefreshToken(user.id);
+
+  await context.prisma.user.update({
+    where: {
+      id: user.id
+    },
+    data: {
+      refreshToken: newRefreshToken
+    }
+  });
+
   return {
     accessToken: createAccessToken(user.id),
-    refreshToken: createRefreshToken(user.id),
+    refreshToken: newRefreshToken,
     username: user.name
   };
 };

@@ -21,13 +21,16 @@ export const verifyRefreshToken = (token: string) => {
 
 export const getUserId = (req: any) => {
   const authHeader = req.headers.authorization;
-
   const token = authHeader.replace('Bearer ', '');
 
   if (!token) {
     throw new Error('No token found');
   }
 
-  const { userId }: any = verifyAccessToken(token);
-  return parseInt(userId, 10);
+  try {
+    const { userId }: any = verifyAccessToken(token);
+    return parseInt(userId, 10);
+  } catch (e) {
+    return undefined;
+  }
 };
