@@ -2,9 +2,9 @@ scalar IntID
 scalar DateTime
 
 type Query {
-  me: LoggedUser
-
   feed(filter: String, skip: Int, take: Int, orderBy: LinkOrderByInput): [Link!]!
+
+  user(id: String): User
 }
 
 type Mutation {
@@ -50,22 +50,13 @@ type Link {
 type User {
   id: IntID!
   name: String!
-  email: String!
-  links: [Link!]
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type LoggedUser {
-  id: IntID!
-  name: String!
-  email: String!
+  email: String
   links: [Link]
   comments: [Comment]
   votes: [Vote]
   bio: String
   createdAt: DateTime!
-  updatedAt: DateTime!
+  updatedAt: DateTime
 }
 
 type Comment {
