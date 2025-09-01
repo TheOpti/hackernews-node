@@ -1,7 +1,6 @@
 import { authPayloadTypedef } from './typedefs/authPayload';
 import { commentTypedef } from './typedefs/comment';
 import { linkTypedef } from './typedefs/link';
-import { meTypedef } from './typedefs/loggedUser';
 import { subscriptionTypedef } from './typedefs/subscription';
 import { userTypedef } from './typedefs/user';
 import { voteTypedef } from './typedefs/vote';
@@ -11,9 +10,9 @@ const typeDefs = `
   scalar DateTime
 
   type Query {
-    me: LoggedUser
-
     feed(filter: String, skip: Int, take: Int, orderBy: LinkOrderByInput): [Link!]!
+    
+    user(id: String): User
   }
 
   type Mutation {
@@ -46,8 +45,6 @@ const typeDefs = `
   
   ${userTypedef}
 
-  ${meTypedef}
-  
   ${commentTypedef}
 
   ${voteTypedef}

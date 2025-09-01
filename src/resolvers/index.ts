@@ -11,7 +11,7 @@ import {
   updateLink,
   vote
 } from './operations/Mutation';
-import { feed, me } from './operations/Query';
+import { feed, user } from './operations/Query';
 import { newLink, newVote } from './operations/Subscription';
 import { DateTime } from './scalars/datetime';
 import { Resolvers } from '../generated/graphql';
@@ -21,7 +21,7 @@ export const resolvers: Resolvers = {
 
   Query: {
     feed,
-    me
+    user
   },
 
   Mutation: {

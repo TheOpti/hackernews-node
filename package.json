@@ -9,7 +9,7 @@
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "prettier:fix": "prettier \"@(src)/**/*.@(ts)\" --write",
     "save-schema": "ts-node src/generateSchema.ts && npx prettier --write src/generated/schema.graphql",
-    "generate-types": "npm run save-schema && graphql-codegen",
+    "generate-types": "npm run save-schema && graphql-codegen && prettier --write src/generated/graphql.ts",
     "prisma:studio": "prisma studio",
     "prisma:create-migration": "prisma migrate dev --create-only",
     "prisma:seed": "ts-node prisma/seed.ts",

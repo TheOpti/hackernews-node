@@ -12,11 +12,11 @@ export const createRefreshToken = (userId: number) => {
 };
 
 export const verifyAccessToken = (token: string) => {
-  return jwt.verify(token, ACCESS_TOKEN_SECRET);
+  return jwt.verify(token, ACCESS_TOKEN_SECRET) as jwt.JwtPayload;
 };
 
 export const verifyRefreshToken = (token: string) => {
-  return jwt.verify(token, REFRESH_TOKEN_SECRET);
+  return jwt.verify(token, REFRESH_TOKEN_SECRET) as jwt.JwtPayload;
 };
 
 export const getUserId = (req: any) => {
@@ -28,7 +28,7 @@ export const getUserId = (req: any) => {
   }
 
   try {
-    const { userId }: any = verifyAccessToken(token);
+    const { userId }: jwt.JwtPayload = verifyAccessToken(token);
     return parseInt(userId, 10);
   } catch (e) {
     return undefined;

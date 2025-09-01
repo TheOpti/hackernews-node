@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client';
 
-import { LinkOrderByInput, LoggedUser, QueryFeedArgs } from '../../generated/graphql';
+import { LinkOrderByInput, QueryFeedArgs, User } from '../../generated/graphql';
 import { GraphQLContext } from '../../types';
 
 export const feed = async (_: {}, args: QueryFeedArgs, context: GraphQLContext) => {
@@ -46,26 +46,32 @@ export const convertOrderBy = (
   return result;
 };
 
-export const me = async (_: {}, __: {}, context: GraphQLContext) => {
-  if (!context.userId) {
+export const user = async (_: {}, args: { id?: string | null }, context: GraphQLContext) => {
+  if (!args.id) {
     return null;
   }
 
+  const userId = parseInt(args.id);
+
   const user = await context.prisma.user.findUnique({
-    where: { id: context.userId },
-    include: {
-      profile: true
+    where: { id: userId },
+    select: {
+      password: false,
+      salt: false,
+      refreshToken: false,
+      createdAt: true,
+      updatedAt: false,
+      id: true,
+      name: true,
+      profile: true,
+      comments: true,
+      votes: true,
+      email: context.userId === userId
     }
   });
 
-  if (!user) {
-    return null;
-  }
-
   return {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    bio: user.profile?.bio
-  } as LoggedUser;
+    ...user,
+    bio: user!.profile?.bio ?? ''
+  } as User;
 };
