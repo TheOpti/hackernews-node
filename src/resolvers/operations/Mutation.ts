@@ -171,7 +171,7 @@ export const vote = async (_: {}, args: MutationVoteArgs, context: GraphQLContex
   });
 
   if (vote) {
-    throw new Error(`Already voted for link: ${args.linkId}`);
+    throw new Error('Already voted for link');
   }
 
   const newVote = context.prisma.vote.create({
