@@ -1,4 +1,5 @@
 import bcryptjs from 'bcryptjs';
+import validator from 'validator';
 
 import {
   MutationAddLinkArgs,
@@ -13,27 +14,41 @@ import { GraphQLContext } from '../../types';
 import { createAccessToken, createRefreshToken, verifyRefreshToken } from '../../utils/jwt';
 
 export const signup = async (_: {}, args: MutationSignupArgs, context: GraphQLContext) => {
-  // TODO Add validation for registration fields
-  // TODO Send email with confirmation link
+  if (!args.name || !args.email || !args.password) {
+    throw new Error('Name, email, and password are required.');
+  }
+
+  if (!validator.isEmail(args.email)) {
+    throw new Error('Invalid email format.');
+  }
+
+  if (!validator.isStrongPassword(args.password, { minLength: 8 })) {
+    throw new Error('Password must be at least 8 characters and strong.');
+  }
+
+  const existingUser = await context.prisma.user.findUnique({
+    where: { email: args.email }
+  });
+
+  if (existingUser) {
+    throw new Error('Email already in use.');
+  }
+
   const salt = await bcryptjs.genSalt(10);
   const hashedPassword = await bcryptjs.hash(args.password, salt);
-
   const newUser = await context.prisma.user.create({
     data: { ...args, password: hashedPassword, salt, refreshToken: '' }
   });
 
+  // Registration flow: Only return access/refresh tokens if email confirmation is not required
+  // If you require email confirmation, return a message instead and send confirmation email
+  // return { message: 'Registration successful. Please confirm your email.' };
   const refreshToken = createRefreshToken(newUser.id);
-
   await context.prisma.user.update({
-    where: {
-      id: newUser.id
-    },
-    data: {
-      refreshToken: refreshToken
-    }
+    where: { id: newUser.id },
+    data: { refreshToken: refreshToken }
   });
 
-  // TODO Rethink registration what tokens should be returned
   return {
     accessToken: createAccessToken(newUser.id),
     refreshToken,
@@ -58,14 +73,9 @@ export const login = async (_: {}, args: MutationLoginArgs, context: GraphQLCont
   }
 
   const newRefreshToken = createRefreshToken(user.id);
-
   await context.prisma.user.update({
-    where: {
-      id: user.id
-    },
-    data: {
-      refreshToken: newRefreshToken
-    }
+    where: { id: user.id },
+    data: { refreshToken: newRefreshToken }
   });
 
   return {
@@ -200,30 +210,26 @@ export const refreshToken = async (
   try {
     const { userId: id }: any = verifyRefreshToken(refreshToken);
 
+    // Only allow refresh if the token matches the one stored in DB
     const user = await context.prisma.user.findFirst({
       where: {
         id,
         refreshToken
       },
-      select: {
-        email: true
-      }
+      select: { email: true }
     });
 
     if (!user) {
       throw new Error('Invalid refresh token');
     }
 
+    // Issue new refresh token and store it (rotating any previous value)
     const newAccessToken = createAccessToken(id);
     const newRefreshToken = createRefreshToken(id);
 
     await context.prisma.user.update({
-      where: {
-        id
-      },
-      data: {
-        refreshToken: newRefreshToken
-      }
+      where: { id },
+      data: { refreshToken: newRefreshToken }
     });
 
     return {
